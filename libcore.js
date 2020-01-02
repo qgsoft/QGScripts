@@ -4,6 +4,10 @@ var NeedInterceptCheckVideo = false;
 var REGREX_IQY = [ 
     new RegExp(".*t7z.cupid.iqiyi.com.*?","i")
 ];
+var REGREX_VQQ = [
+    new RegExp(".*livew.l.qq.com/livemsg.*?","i"),
+    new RegExp(".*btrace.video.qq.com.*?","i")
+]
 //---------------------------------------------------------
 
 //脚本被加载
@@ -70,6 +74,48 @@ function BlockAD_IQY(text) {
     }
 }
 
+//Block腾讯视频广告
+function Block_VQQ(text){
+    try{
+        var reg_val = /(.*\()(\{.*\})/i;
+        if( (result = reg_val.exec(text)) != null ) {
+            var oldHeader = result[1];
+            var jsonValue = result[2];
+            //错误的格式
+            if(!oldHeader || !jsonValue) return false;
+            
+            //转换为JSON
+            jsonValue = JSON.parse(jsonValue);
+            if(!jsonValue) return false; 
+
+            var haveAd = false;
+            var adlist = jsonValue.adList;
+            if( adlist ) {
+                var s = adlist.item;
+                if( s ) {
+                    s.splice(0,s.length);
+                    haveAd = true;       
+                }
+            }
+            var adLoc = jsonValue.adLoc;
+            if( adLoc ){
+                adLoc.iCheckLogin = 0,
+                adLoc.iCheckUser = 0,
+                adLoc.iVipInfoRsp = 1,
+                adLoc.isvip = 1;
+                haveAd = true;
+            }
+            if( haveAd ){
+                var dv = JSON.stringify(jsonValue);
+                return oldHeader + dv + ")";
+            }
+        }
+        return text;
+    } catch(e) {
+        return "";
+    }
+}
+
 //参数1:webView是不靠谱的。可能会为空在ServiceWorkder线程中
 //拦截一个请求、JS文件等。支持拦截ServiceWorker中的请求
 function OnInterceptRequest(webView,request,webUrl,isFromMainFrame,isGet,scheme) {
@@ -81,23 +127,32 @@ function OnInterceptRequest(webView,request,webUrl,isFromMainFrame,isGet,scheme)
             if(client){
                 return ["application/json","utf-8",BlockAD_IQY(client)];
             }
+        } else if(REGREX_VQQ[0].test(webUrl)) {
+            var client = new Http(webUrl,"get").run();
+            if(client){
+                return ["text/json","utf-8",Block_VQQ(client)];
+            }
+        } else if(REGREX_VQQ[1].test(webUrl)) {
+            return ["","",""];
         }
-        if (webUrl.lastIndexOf("chunk-vendors.") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/chunk-vendors.js"];
-        } else if (webUrl.lastIndexOf("chunk-video") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/chunk-video.js"];
-        } else if (webUrl.lastIndexOf("appPl.") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/appPl.js"];
-        } else if (webUrl.lastIndexOf("main.") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/main.js"];
-        } else if (webUrl.lastIndexOf("chunk-common.") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/chunk-common.js"];
-        } else if (webUrl.lastIndexOf("appPs.") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/appPs.js"];
-        } else if (webUrl.lastIndexOf("appP.") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/appP.js"];
-        } else if (webUrl.lastIndexOf("chunk-play.") > 0 ){
-            return [request,"http://10.10.9.24:8080/iqy/chunk-play.js"];
+        else{
+            if (webUrl.lastIndexOf("chunk-vendors.") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/chunk-vendors.min.js"];
+            } else if (webUrl.lastIndexOf("chunk-video") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/chunk-video.min.js"];
+            } else if (webUrl.lastIndexOf("appPl.") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/appPl.min.js"];
+            } else if (webUrl.lastIndexOf("main.") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/main.min.js"];
+            } else if (webUrl.lastIndexOf("chunk-common.") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/chunk-common.min.js"];
+            } else if (webUrl.lastIndexOf("appPs.") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/appPs.min.js"];
+            } else if (webUrl.lastIndexOf("appP.") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/appP.min.js"];
+            } else if (webUrl.lastIndexOf("chunk-play.") > 0 ){
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/chunk-play.min.js"];
+            }
         }
     }
     return false;
@@ -111,7 +166,11 @@ function OnUrlChange(url){
         app.SetCookies(".iqiyi.com",["P00003=1;","P00002=1;"]);
         NeedInterceptCheckVideo = true;
         app.SetInterceptResource(false);
-    } else {
+    } else if (url.indexOf("v.qq.com")>=0){
+        NeedInterceptCheckVideo = true;
+        app.SetInterceptResource(false);
+    }
+    else {
         app.SetInterceptResource(true);
     }
 }
