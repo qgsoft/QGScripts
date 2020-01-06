@@ -26615,6 +26615,8 @@
            var t = this,
                e = t.$createElement,
                n = t._self._c || e;
+               t.ispay = true;
+               t.show = false;
            return !t.ispay && t.show ? n("div", [4 === t.status ? n("a", {
                class: t.vip || t.ticketNum ? "btn_coupon_small" : "btn_pay_small",
                attrs: {
