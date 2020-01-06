@@ -28022,17 +28022,17 @@
                var t = this,
                    e = t.$createElement,
                    n = t._self._c || e;
-                   
-                   if( t._v("付费看完整版") ){
-                        if( !t.isalert ){
-                            t.isalert = true;
-                            alert("该影片为单次付费购买类型不在VIP范围内无法播放")
-                        }
-                   } else {
-                        t.limitTime = false;  
-                        t.ispay = true;
-                        t.uvip = true;   
-                   }   
+
+                if( 7 === t.status ){
+                    if( !t.isalert ){
+                        t.isalert = true;
+                        alert("该影片为单次付费购买类型不在VIP范围内无法播放")
+                    }
+                } else {
+                    t.limitTime = false;  
+                    t.ispay = true;
+                    t.uvip = true;   
+                }   
 
                return n("div", [t.limitTime && !t.isSpecialCid ? n("a", {
                    staticClass: "btn_try",
