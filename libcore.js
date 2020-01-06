@@ -6,7 +6,14 @@ var REGREX_IQY = [
 ];
 var REGREX_VQQ = [
     new RegExp(".*livew.l.qq.com/livemsg.*?","i"),
-    new RegExp(".*btrace.video.qq.com.*?","i")
+    new RegExp(".*btrace.video.qq.com.*?","i"),
+    new RegExp(".*tencentwap/script/play/vip.*?"),
+    //去限APP限制
+    new RegExp(".*tencentwap/script/mplay/\d+\.js.*?"),
+    //旧版去提示
+    new RegExp(".*tencentvideo/script/msite/msite.*"),
+    //合成版去提示
+    new RegExp(".*h5defn.dcbbaa.js,h5uifullscreen.a3a14d.js.*")
 ]
 //---------------------------------------------------------
 
@@ -152,6 +159,17 @@ function OnInterceptRequest(webView,request,webUrl,isFromMainFrame,isGet,scheme)
                 return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/appP.min.js"];
             } else if (webUrl.lastIndexOf("chunk-play.") > 0 ){
                 return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts@0.001/iqy/chunk-play.min.js"];
+            } 
+            
+            //腾讯视频系列
+            if( REGREX_VQQ[2].test(webUrl)) {   
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts/qqvideo/vip_2.min.js"];
+            } else if(REGREX_VQQ[3].test(webUrl) ) {
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts/qqvideo/20191009.min.js"];
+            } else if(REGREX_VQQ[4].test(webUrl) ) {
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts/qqvideo/msite.01b4.min.js"];
+            } else if(REGREX_VQQ[5].test(webUrl) ) {
+                return [request,"https://cdn.jsdelivr.net/gh/qgsoft/QGScripts/qqvideo/h5defn.dcbbaa.js"];
             }
         }
     }

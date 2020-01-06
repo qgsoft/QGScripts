@@ -162,6 +162,11 @@ function videosite(){
                 }
             }
         },300);      
+    } else if( window.location.host.concat("v.qq.com")) {
+        var gamelist = document.getElementsByClassName("mod_game_rec");
+        for( var i = 0; i < gamelist.length; i++) gamelist[i].remove();
+        var adlist = document.getElementsByClassName("mod_source");
+        for( var i = 0; i < adlist.length; i++) adlist[i].remove();
     }
 }
 
