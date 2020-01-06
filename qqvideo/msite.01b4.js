@@ -32605,6 +32605,7 @@
                                            window.location.href = tourl;
                                        } else if( c != null ){
                                            debugger;
+                                           alert("打开了小视频");
                                            console.log("打开小视频:"+ c);
                                        }
 
