@@ -1627,35 +1627,15 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
           confid: 51
         }).openFixer(p).downloadFixer(f), e.defaultAction !== !1) {
           var g = function (t, o) {
-            var r = o.openurl,
-            c = o.downloadurl;
-            return l.click(t),
-            n.browser.QQvideo ? void i(24) (function (e) {
-              e.invoke('openView', {
-                url: r
-              })
-            })  : void (2 == t ? !n.browser.WeChat || a && 1 != s.verCompare('6.5.5', a[1]) ? v.tryopen(r, {
-              onfail: function () {
-                location.href = c
-              }
-            })  : v.wx(r, {
-              onfail: function () {
-                v.tryopen(r, {
-                  onfail: function () {
-                    location.href = c
-                  }
-                })
-              }
-            })  : 1 == t || 14 == t ? n.browser.WeChat ? v.wx(r, {
-              debug: e.debug
-            })  : setTimeout(function () {
-              location.href = r
-            }, 50)  : 10 == t ? o.downloader.pause()  : 11 == t || 13 == t ? o.downloader.install()  : o.downloader && m && 15 != t ? o.downloader.start({
-              url: c,
-              confid: o.model.confid
-            })  : setTimeout(function () {
-              location.href = c
-            }, 50))
+             var cid = o.model.cover_id;
+            var vid = o.model.video_id;
+            var tourl = "";
+            if( cid == null ){
+              tourl = "play.html?vid=" + vid;
+            } else {
+              tourl = "play.html?cid=" + cid + "&vid=" + vid;
+            }
+            location.href = tourl;
           };
           d.on('action', g)
         }
@@ -8457,32 +8437,6 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
     a = i(58),
     s = i(7) ();
     e.exports = function (e) {
-      var t,
-      i,
-      l = n.getAidParam('1', n.getAid());
-      2 === e.appType ? (t = r({
-      }).model({
-        confid: e.liteConfid || 897
-      }).openFixer(function () {
-        return e.vid || e.cid ? 'videolite://v.qq.com/VideoDetailActivity?vid=' + (e.vid || '') + '&cid=' + (e.cid || '') + '&from=' + e.liteConfid : 'videolite://v.qq.com/HomeActivity'
-      }), i = e.liteConfid || 897, t.action())  : 1 === e.appType && (t = o().downloadFixer(function (e) {
-        return 'xiaomiqj' === a && s.browser.MiuiBrowser ? 'market://details?id=com.tencent.qqlive&startDownload=true&ref=app_free_migs&back=true' : e
-      }).openFixer(function (e, t) {
-        return e
-      }), i = e.appConfid || 513, t.model('column' == PAGE_TYPE ? {
-        column_id: e.lid || '',
-        exsource: window.EXSOURCE,
-        confid: i,
-        from: e.appConfid || l || a
-      }
-       : {
-        video_id: e.vid || '',
-        cover_id: e.cid || '',
-        column_id: e.lid || '',
-        exsource: window.EXSOURCE,
-        confid: i,
-        from: e.appConfid || l || a
-      }), t.action())
     }
   },
   function (e, t, i) {
@@ -19883,7 +19837,8 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
             }
             var c = function (t) {
               //t['_vn_id_' + n.uid] || (o.emit(e, t, n.lazy), t['_vn_id_' + n.uid] = !0)
-              console.log("禁止打开APP");
+              //debugger;
+              //console.log("禁止打开APP");
             };
             a.addEventListener(e, c, !0),
             r[e] = function () {
