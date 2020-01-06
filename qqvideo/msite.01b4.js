@@ -4468,13 +4468,6 @@
                        }
 
                        function V(t, e, n) {
-                           var r = "";
-                           if (!t) throw new Error("[util.url.buildUrl]url is required");
-                           return e && null !== e && (r = function (t, e, n) {
-                               var r, o, i = [];
-                               for (r in t) null != (o = F(r, t[r], e, void 0)) && "" !== o && i.push(o);
-                               return i.join("&")
-                           }(e, n)) && r.length ? (0 === t.indexOf("//") && (t = window.location.protocol + t), [t, t.indexOf("?") > -1 ? "&" : "?", r].join("")) : t
                        }
 
                        function F(t, e, n) {
@@ -4550,7 +4543,7 @@
                        z.prototype.toString = function () {
                            return this.msg + (this.code ? "(".concat(this.code, ")") : "")
                        }, z.prototype.RequestErrorType = z.RequestErrorType = H;
-                       var X = "".concat(/^(http|https):$/.test(location.protocol) ? location.protocol : "https:", "//btrace.qq.com/kvcollect");
+                       var X = "";
 
                        function Z() {}
 
@@ -11158,21 +11151,7 @@
                                }, {
                                    key: "formatData",
                                    value: function (t, e) {
-                                       var n, r, o, i, a = [],
-                                           s = Math.random().toString(36).substr(2, 8),
-                                           c = U({}, e, {}, this.kvParams || {}),
-                                           u = U({}, t, {}, this.baseParams, {
-                                               kv: C()(c),
-                                               _dc: s
-                                           }),
-                                           f = S()(n = S()(r = S()(o = "".concat("//btrace.qq.com/kvcollect", "?BossId=")).call(o, t.BossId || "", "&Pwd=")).call(r, t.Pwd, "&_dc=")).call(n, s);
-                                       return l()(i = g()(u)).call(i, (function (t) {
-                                           var e;
-                                           a.push(S()(e = "".concat(t, "=")).call(e, encodeURIComponent(u[t])))
-                                       })), {
-                                           url: f,
-                                           data: a.join("&")
-                                       }
+                                    
                                    }
                                }, {
                                    key: "beconReport",
@@ -18694,13 +18673,6 @@
        }
 
        function ue(t, e, n) {
-           var r = "";
-           if (!t) throw new Error("[util.url.buildUrl]url is required");
-           return e && null !== e && (r = function (t, e, n) {
-               var r, o, i, a = [];
-               for (r in t) o = t[r], null != (i = le(r, o, e, n)) && "" !== i && a.push(i);
-               return a.join("&")
-           }(e, n)) && r.length ? (0 === t.indexOf("//") && (t = window.location.protocol + t), [t, t.indexOf("?") > -1 ? "&" : "?", r].join("")) : t
        }
 
        function le(t, e, n) {
@@ -18749,7 +18721,7 @@
                return t && "function" == typeof Symbol && t.constructor === Symbol && t !== Symbol.prototype ? "symbol" : typeof t
            })(t)
        }
-       var ve = "".concat(/^(http|https):$/.test(location.protocol) ? location.protocol : "https:", "//btrace.qq.com/kvcollect");
+       var ve = "";
 
        function ye() {}
 
@@ -28050,23 +28022,19 @@
                var t = this,
                    e = t.$createElement,
                    n = t._self._c || e;
-                   t.limitTime = 0;
-                   t.ispay = true;
-                   t.uvip = true;
-                   t.vip = true;
                    
-               return n("div", [9 == t.status || 10 == t.status || 11 == t.status || 12 == t.status ? [n("div", {
-                   staticClass: "use_app_tips"
-               }, [t._m(0), t._v(" "), n("a", {
-                   staticClass: "tips_btn",
-                   attrs: {
-                       "open-app": "",
-                       "data-additional": t.additional,
-                       href: "javascript:;"
-                   }
-               }, [n("span", {
-                   staticClass: "txt"
-               }, [t._v(t._s(t.openAppText) + "腾讯视频")])])])] : [t.limitTime && !t.isSpecialCid ? n("a", {
+                   if( t._v("付费看完整版") ){
+                        if( !t.isalert ){
+                            t.isalert = true;
+                            alert("该影片为单次付费购买类型不在VIP范围内无法播放")
+                        }
+                   } else {
+                        t.limitTime = false;  
+                        t.ispay = true;
+                        t.uvip = true;   
+                   }   
+
+               return n("div", [t.limitTime && !t.isSpecialCid ? n("a", {
                    staticClass: "btn_try",
                    attrs: {
                        href: "javascript:;",
@@ -28242,7 +28210,7 @@
                        "xlink:href": "#txp_svg_play_lg"
                    }
                })])])] : [n("a", {
-                   staticClass: "btn_pay",
+                   staticClass: "btn_pay2",
                    class: {
                        btn_ct: !t.limitTime || t.isSpecialCid
                    },
@@ -28372,7 +28340,7 @@
                        "xmlns:xlink": "http://www.w3.org/1999/xlink",
                        "xlink:href": "#txp_svg_play_lg"
                    }
-               })])])]]]], 2)
+               })])])]]], 2)
            }), [
                function () {
                    var t = this.$createElement,
@@ -32524,7 +32492,7 @@
                                r = {};
                            this.clientData && (this.clientData.wujiData.forEach((function (t) {
                                r[t.modType] = !0
-                           })), this.wxAutoOpen(), this.setGlobalOptions(this.clientData.playData), this.setShareInfo(this.clientData.playData), t = $("[lazyload]"), e = new IntersectionObserver((function (t, e) {
+                           })), this.setGlobalOptions(this.clientData.playData), this.setShareInfo(this.clientData.playData), t = $("[lazyload]"), e = new IntersectionObserver((function (t, e) {
                                t.forEach((function (t) {
                                    if (t.isIntersecting) {
                                        var n = $(t.target),

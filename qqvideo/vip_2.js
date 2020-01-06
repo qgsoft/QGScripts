@@ -10868,18 +10868,7 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
       we = !1,
       be = l.getUrlParam('pgc');
       if (d.isTenvideo()) {
-        var xe = [
-          'txvideo://v.qq.com/VideoDetailActivity?cid=',
-          ve,
-          '&vid=',
-          me
-        ].join('');
-        G && d.getAppVersion() < '5.5.1' ? (xe = [
-          'tenvideo2://?action=1&cover_id=',
-          ve,
-          '&video_id=',
-          me
-        ].join(''), location.href = xe)  : d.openView(xe, 1)
+     
       }
       var Te = !1,
       ke = function () {
@@ -10917,12 +10906,9 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
       'use strict';
 
       //修改一些属性,播放器不会显示那些多余的框
-      e.vip = false;
-      e.ispay = true;
-      e.uvip = true;
-      e.disney = false;
       e.limit_time = 0;
-
+      e.uvip = true;
+ 
       var i = this,
       n = (i.$helpers, e.status),
       o = e.limit_time,
@@ -10935,7 +10921,7 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
       u = e.isIos,
       p = e.disney,
       f = '';
-      
+
       return 9 == n || 10 == n || 11 == n || 12 == n ? f += ' <div class="use_app_tips"> <div class="tips_txt">请使用腾讯视频手机端最新版本<br/>解锁观看本内容~</div> <a class="tips_btn" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频</span> </a> </div> ' : (f += ' ', o && (f += ' <a class="btn_try" href="javascript:;" _hot="', f += r ? 'h5.detail.limitwatch' : ' h5.detail.trywatch', f += '"> <span class="txt">试看', f += a(o), f += '分钟</span> </a> '), f += ' ', 4 == n ? (f += '  ', r ? (f += ' ', f += o > 0 ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"', s && l > 0 && (f += ' data-type="use_ticket" _hot="h5.detail.useticket"'), f += '> <span class="txt">', f += s ? '用券看完整版' : '付费看完整版', f += '</span> </a> '), f += ' ')  : 5 == n ? (f += '  ', s || r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' ', c && d && u ? f += ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"> <span class="txt">付费看完整版</span> </a> '), f += ' '), f += ' ')  : 6 == n ? (f += ' ', r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;" data-type="', f += c ? 'uvip' : 'openpay', f += '" data-aidsource="2" _hot="h5.detail.', f += c ? 'uvippay' : 'pay', f += '"> <span class="txt">', f += c ? '开通联合会员' : '开通VIP', f += '免费看</span> </a> '), f += ' ')  : 7 == n ? (f += '  ', r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"> <span class="txt">', f += p ? '付费购买' : '付费看完整版', f += '</span> </a> '), f += ' ')  : (f += '  ', o ? (f += ' ', f += 0 == s && c ? ' <a class="js_btn_pay btn_pay" href="javascript:;" data-type="uvip" _hot="h5.detail.uvippay"><span class="txt">开通联合会员抢先看</span></a> ' : ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ', f += ' ')  : f += ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' '), f += ' '),
       f += ' ',
       new String(f)
