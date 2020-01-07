@@ -10092,8 +10092,7 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
         VIP_MAIN_PLAYER.on('playStateChange', function (t) {
           switch (t) {
             case 1:
-              I(),
-              2 !== n && 3 !== n && e.find('.js_btn_pay_small').removeClass('none'),
+              I(), 
               G && ($('body').off('touchmove').on('touchmove', ke), $(window).scroll(ke));
               break;
             case 0:
@@ -10288,159 +10287,7 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
         $(document).delegate('.btn_replay', 'click', function () {
           A()
         }),
-        $(document).delegate('.js_btn_pay,.btn_pay_a,.btn_pay_b,.js_btn_pay_small', 'click', function (e) {
-          var t = $(this).data('type'),
-          i = '1*' + ve,
-          n = s.getUin(),
-          o = {
-            ptag: 'h5.detail'
-          };
-          o.channel = 11,
-          o.source = $(this).data('aidsource'),
-          o.cid = ve,
-          o.vid = me;
-          var r = location.href.toString().replace(/[\?&#](code|state|timestamp)=[^&#]+/gi, '');
-          if ('openpay' == t) {
-            var a = l.getUrlParam('aid');
-            if (s.isLogin()) {
-              var c = [
-                'https://film.qq.com/weixin/upay.html?showwxpaytitle=1&so=1&aid=',
-                a,
-                '&cid=',
-                ve,
-                '&vid=',
-                me,
-                '&dr=1&ru=',
-                encodeURIComponent(r)
-              ].join('');
-              '1' == l.getUrlParam('sandbox') && (c += '&sandbox=1'),
-              location.href = c
-            } else s.openLogin()
-          } else 'use_ticket' == t ? (e.preventDefault(), X(n, 1, 3, null, i, null, null, 'ticket_trade'), Y().then(function (e) {
-            var t = new Date;
-            t.setDate(t.getDate() + e);
-            var i = t.getMonth() + 1 > 9 ? t.getMonth() + 1 : '0' + (t.getMonth() + 1);
-            t = t.getFullYear() + '-' + i + '-' + t.getDate() + ' ' + t.getHours() + ':' + t.getMinutes(),
-            H(t)
-          }))  : 'use_money' == t ? (e.preventDefault(), s.isStrictLogin(function (e) {
-            if (!e) return void s.openLogin();
-            $('.g_pop_pay .pop_close').trigger('click'),
-            X(n, 3, 2, null, i, null, null, 'price-cloud');
-            var t = '';
-            G || J ? t = 'wechat-copyright-ios-hollywood' : K ? t = 'wechat-copyright-android-hollywood' : Q.indexOf('Windows Phone') >= 0 && (t = 'wechat-copyright-iap-hollywood');
-            var r = window.Promise;
-            window.Promise = v;
-            var a = {
-              cid: ve,
-              type: 0
-            },
-            l = {
-              buzType: 'cover',
-              loginType: s.loginType()
-            },
-            c = f.getAid(o);
-            c && (l.aid = c),
-            '1' == m.get('sandbox') ? l.sandbox = 1 : void 0,
-            'qqbrowseract' === m.get('extendparam') ? l.qqbrowseract = 1 : void 0,
-            'qq' == s.loginType() ? h.get('vqq_appid') && h.get('vqq_openid') && h.get('vqq_access_token') ? (l.openid = h.get('vqq_openid'), l.openkey = h.get('vqq_access_token'))  : n && (l.uin = n.toString())  : 'wx' == s.loginType() && (l.wxAppid2 = h.get('appid'), l.openid = h.get('openid'), l.openkey = h.get('access_token')),
-            SinglePay.pay(a, l).then(function (e) {
-              location.reload()
-            }, function () {
-            }).then(function () {
-              window.Promise = r
-            })
-          }))  : 'uvip' == t ? s.isStrictLogin(function (e) {
-            return e ? void u.getUvip().then(function (e) {
-              var t = e.payvip,
-              i = e.uvip,
-              n = l.getUrlParam('from') ? i.title2 : i.title;
-              if ('all' !== i.login_type && i.login_type != s.loginType()) {
-                var c = 'qq' == i.login_type ? '微信' : 'QQ',
-                u = 'qq' == i.login_type ? 'QQ' : '微信';
-                p.dialog({
-                  text: n + '联合会员不支持' + c + '账号，请切换至其他' + u + '账号',
-                  btn_num: 2,
-                  btn_ok_txt: '切换' + u,
-                  callback: function (e) {
-                    e && s.logout(function () {
-                      s.openLogin({
-                        type: i.login_type
-                      })
-                    })
-                  }
-                })
-              } else if (t && 'HLWHF' == t.servicetype) {
-                var h = 'all' != e.login_type ? 'qq' == e.login_type ? 'QQ' : '微信' : '';
-                p.dialog({
-                  title: '温馨提示',
-                  text: n + '联合会员不支持话费支付用户，您可切换至其他' + h + '账号开通。',
-                  btn_num: 2,
-                  btn_ok_txt: '切换QQ',
-                  btn_cancel_txt: '我知道了',
-                  callback: function (t) {
-                    if (t) {
-                      var i = {
-                      };
-                      'all' != e.login_type && (i.type = e.login_type),
-                      s.openLogin(i)
-                    }
-                  }
-                })
-              } else if ('qquvip' === ye) if (o.scene = 28, o.serial = 21, G && Z) {
-                var v = window.unionPay;
-                v.unionOpen({
-                  type: 'shvip',
-                  monthList: '3,1,6',
-                  offerid: '1450012942',
-                  aid: l.getUrlParam('qqaid') + '|aid=' + f.getAid(o),
-                  onPayCallback: function (e) {
-                    0 == e.ret && location.reload()
-                  }
-                })
-              } else {
-                $('.g_pop_mask').hide(),
-                $('.g_pop_pay').hide(),
-                o.scene = 28,
-                o.serial = 21;
-                var m = !1,
-                y = {
-                  m: 'buy',
-                  c: 'qqsubscribe',
-                  appid: '1450012972',
-                  service: 'SHVIPGG',
-                  pf: 'wechat_wx-2001-wx-2011-hlw',
-                  account: 'qq',
-                  aid: f.getAid(o),
-                  ru: r,
-                  onSuccess: function () {
-                    m = !0
-                  },
-                  onClose: function () {
-                    m && location.reload()
-                  }
-                };
-                te || Z || d.isTenvideo() || (y.n = 1),
-                1 == l.getUrlParam('sandbox') && (y.sandbox = 1),
-                /qq/.test(ye) && (y.appid = '1450012942', l.getUrlParam('qqaid') && (y.aid = l.getUrlParam('qqaid') + '|aid=' + f.getAid(o))),
-                Midas.openSubscribe(y)
-              } else {
-                var _ = i.url + (~i.url.indexOf('?') ? '' : '?');
-                location.href = [
-                  _ + '&aid=',
-                  a,
-                  '&cid=',
-                  ve,
-                  '&vid=',
-                  me,
-                  '&ru=',
-                  encodeURIComponent(r),
-                  '&ptag=',
-                  g
-                ].join('')
-              }
-            })  : s.openLogin()
-          })  : t || ($(this).hasClass('js_btn_pay_small') ? M('ing')  : '37' == $(this).data('aidsource') ? M('after')  : M())
-        }),
+        $(document).delegate('.js_btn_pay,.btn_pay_a,.btn_pay_b,.js_btn_pay_small', 'click', function (e) {}),
         $(document).delegate('.g_pop_pay .link', 'click', function () {
           s.openLogin()
         }),
@@ -10458,8 +10305,8 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
       function I() {
         e.find('.mod_player_viptips').addClass('none'),
         e.find('.mod_player').removeClass('none'),
-        G && !oe && ($('body').off('touchmove').on('touchmove', ke), $(window).scroll(ke)),
-        e.find('.js_btn_pay_small').addClass('none')
+        G && !oe && ($('body').off('touchmove').on('touchmove', ke), $(window).scroll(ke))
+        //e.find('.js_btn_pay_small').addClass('none')
       }
       function O() {
         try {
@@ -10907,7 +10754,9 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
 
       //修改一些属性,播放器不会显示那些多余的框
       e.limit_time = 0;
-      e.uvip = true;
+      //e.uvip = false;
+      //e.vip = false;
+      e.ispay = true;
  
       var i = this,
       n = (i.$helpers, e.status),
@@ -10922,7 +10771,15 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
       p = e.disney,
       f = '';
 
-      return 9 == n || 10 == n || 11 == n || 12 == n ? f += ' <div class="use_app_tips"> <div class="tips_txt">请使用腾讯视频手机端最新版本<br/>解锁观看本内容~</div> <a class="tips_btn" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频</span> </a> </div> ' : (f += ' ', o && (f += ' <a class="btn_try" href="javascript:;" _hot="', f += r ? 'h5.detail.limitwatch' : ' h5.detail.trywatch', f += '"> <span class="txt">试看', f += a(o), f += '分钟</span> </a> '), f += ' ', 4 == n ? (f += '  ', r ? (f += ' ', f += o > 0 ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"', s && l > 0 && (f += ' data-type="use_ticket" _hot="h5.detail.useticket"'), f += '> <span class="txt">', f += s ? '用券看完整版' : '付费看完整版', f += '</span> </a> '), f += ' ')  : 5 == n ? (f += '  ', s || r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' ', c && d && u ? f += ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"> <span class="txt">付费看完整版</span> </a> '), f += ' '), f += ' ')  : 6 == n ? (f += ' ', r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;" data-type="', f += c ? 'uvip' : 'openpay', f += '" data-aidsource="2" _hot="h5.detail.', f += c ? 'uvippay' : 'pay', f += '"> <span class="txt">', f += c ? '开通联合会员' : '开通VIP', f += '免费看</span> </a> '), f += ' ')  : 7 == n ? (f += '  ', r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"> <span class="txt">', f += p ? '付费购买' : '付费看完整版', f += '</span> </a> '), f += ' ')  : (f += '  ', o ? (f += ' ', f += 0 == s && c ? ' <a class="js_btn_pay btn_pay" href="javascript:;" data-type="uvip" _hot="h5.detail.uvippay"><span class="txt">开通联合会员抢先看</span></a> ' : ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ', f += ' ')  : f += ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' '), f += ' '),
+      if( 4 === e.status ){
+        if( !e.isalert ){
+            e.isalert = true;
+            alert("该影片可能是单次付费购买类型不在VIP范围内无法播放")
+        }
+      }
+
+      return 9 == n || 10 == n || 11 == n || 12 == n ? f += ' <div class="use_app_tips"> <div class="tips_txt">请使用腾讯视频手机端最新版本<br/>解锁观看本内容~</div> <a class="tips_btn" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频</span> </a> </div> ' : (f += ' ', o && (f += ' <a class="btn_try" href="javascript:;" _hot="', f += r ? 'h5.detail.limitwatch' : ' h5.detail.trywatch', f += '"> <span class="txt">试看', f += a(o), f += '分钟</span> </a> '), f += ' ', 4 == n ? (f += '  ', r ? (f += ' ', f += o > 0 ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"', s && l > 0 && (f += ' data-type="use_ticket" _hot="h5.detail.useticket"'), f += '> <span class="txt">', f += s ? '用券影片' : '不在VIP范围内', f += '</span> </a> '), f += ' ')  : 5 == n ? (f += '  ', s || r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' ', c && d && u ? f += ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"> <span class="txt">打开腾讯视频看完整版</span> </a> ' : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"> <span class="txt">用券影片不在VIP范围内</span> </a> '), f += ' '), f += ' ')  : 6 == n ? (f += ' ', r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;" data-type="', f += c ? 'uvip' : 'openpay', f += '" data-aidsource="2" _hot="h5.detail.', f += c ? 'uvippay' : 'pay', f += '"> <span class="txt">', f += c ? '开通联合会员' : '开通VIP', f += '免费看</span> </a> '), f += ' ')  : 7 == n ? (f += '  ', r ? (f += ' ', f += o ? ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ' : ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' ')  : (f += ' <a class="js_btn_pay btn_pay', 0 == o && (f += ' btn_ct'), f += '" href="javascript:;"> <span class="txt">', f += p ? '用券影片' : '不在VIP范围内', f += '</span> </a> '), f += ' ')  : (f += '  ', o ? (f += ' ', f += 0 == s && c ? ' <a class="js_btn_pay btn_pay" href="javascript:;" data-type="uvip" _hot="h5.detail.uvippay"><span class="txt">开通联合会员抢先看</span></a> ' : ' <a class="btn_open js_openqqlive" href="javascript:;" data-type="openqqlive" _hot="h5.detail.openqqlive"><span class="txt">打开腾讯视频看完整版</span></a> ', f += ' ')  : f += ' <a class="btn_play" href="javascript:;" _hot="h5.detail.play"> <div style="height:100%;width:100%;position:absolute;z-index:4"></div> <svg class="txp_icon txp_icon_play_lg" viewBox="0 0 68 68"> <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#txp_svg_play_lg"></use> </svg> </a> ', f += ' '), f += ' '),
+     
       f += ' ',
       new String(f)
     })
@@ -10931,16 +10788,7 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
     var n = i(11);
     e.exports = n('_component/vip/player/smalltips', function (e, t) {
       'use strict';
-      var i = this,
-      n = (i.$helpers, e.status),
-      o = e.ispay,
-      r = e.vip,
-      a = e.ticket_num,
-      s = e.qquvip,
-      l = e.disney,
-      c = '';
-      return 4 == n && 0 == o ? (c += '  <a class="js_btn_pay_small', c += r || a ? ' btn_coupon_small' : ' btn_pay_small', c += '" href="javascript:;" ', a > 0 && (c += 'data-type="use_ticket" _hot="h5.detail.useticket"'), c += '> <span class="txt">', c += r || a ? '用券观看' : '付费观看', c += '</span> </a> ')  : 5 == n && 0 == r && 0 == o ? c += '  <a class="js_btn_pay_small btn_pay_small" href="javascript:;"> <span class="txt">付费观看</span> </a> ' : 6 == n && 0 == o ? (c += '  <a class="js_btn_pay_small btn_pay_small" href="javascript:;" data-type="', c += s ? 'qquvip' : 'openpay', c += '" data-aidsource="36" _hot="h5.detail.', c += s ? 'uvippay' : 'pay', c += '"> <span class="txt">开通', c += s ? '会员' : 'VIP', c += '</span> </a> ')  : 7 == n && 0 == o && (c += '  <a class="js_btn_pay_small btn_pay_small" href="javascript:;"> <span class="txt">', c += l ? '付费购买' : '付费观看', c += '</span> </a> '),
-      new String(c)
+
     })
   },
   function (e, t, i) {

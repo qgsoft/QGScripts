@@ -32572,9 +32572,8 @@
                                            var tourl = "/play.html?cid=" + s + "&vid=" + c;
                                            window.location.href = tourl;
                                        } else if( c != null ){
-                                           debugger;
-                                           alert("打开了小视频");
-                                           console.log("打开小视频:"+ c);
+                                            var tourl = "/play.html?vid=" + c;
+                                            window.location.href = tourl;
                                        }
 
                                    if (o && function (t) {
