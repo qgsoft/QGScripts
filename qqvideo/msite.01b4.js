@@ -8239,17 +8239,17 @@
                    name: "腾讯视频",
                    icon: "http://i.gtimg.cn/qqlive/images/20150608/logo_app.png",
                    pkg: r.os.iphone ? "com.tencent.live4iphone" : "com.tencent.qqlive",
-                   pkgurl: "tenvideo2://can_open_me_if_install_and_regeister_this_scheme",
-                   scheme: r.os.ipad ? "tenvideohd://?" : "tenvideo2://?",
+                   pkgurl: "",
+                   scheme: r.os.ipad ? "" : "",
                    downloadid: "TencentVideo",
                    appid: 100730521,
                    via: "ANDROID.QQLIVE",
-                   downloadUrl: r.os.ios ? r.os.iphone ? "http://itunes.apple.com/cn/app/id458318329?mt=8" : "https://itunes.apple.com/cn/app/teng-xun-shi-pinhd/id407925512?mt=8" : r.os.android ? "http://mcgi.v.qq.com/commdatav2?cmd=4&confid={confid}&platform=aphone" : "http://v.qq.com/download.html",
+                   downloadUrl: "",
                    md5: function (t) {
-                       return "//mcgi.v.qq.com/commdatav2?cmd=39&confid=" + t
-                   }, playerDownloadCallback: "str_stopPlayerListenerWxDownloadState",
-                   wxappid: "wx5a3178167066897b",
-                   appappid: "wxca942bbff22e0e51",
+                       return "" + t
+                   }, playerDownloadCallback: "",
+                   wxappid: "",
+                   appappid: "",
                    uaname: "QQvideo"
                }
            },
