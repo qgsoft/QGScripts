@@ -5418,19 +5418,7 @@
                 }, {
                     key: "openApp",
                     value: function (t) {
-                        (0, g.default)({
-                            spmC: "player",
-                            spm: "a2h0j.10182321.player.commend",
-                            videoId: window.vid || ""
-                        }, "CLK");
-                        var e = t.target.getAttribute("vid"),
-                            i = t.target.getAttribute("codeId");
-                        if (this._player.sendGoldLog("/yt/youkuphoneplaypage.myoukuinteraction.click_to_player", "CLK", "click_type=player-recommend", "H1568306482"), this.callAppOpts) {
-                            if (this.callAppOpts.params.source = "playerrecommend", e && (this.callAppOpts.exdParams.position = "playerrecommend", this.callAppOpts.params.vid = e, this.callAppOpts.params.action = "play", this.callAppOpts.pathname = "play"), _.browser.isYouku) return this._player.pause(), void v.default.play({
-                                vid: i
-                            });
-                            this.callAppOpts.downloadUrl = "https://down2.youku.com/youku/down.php?pub=e0f2e926bf37b273", window.vid && (this.callAppOpts.params.source = "a2h0j.10182321." + this.callAppOpts.params.source), window.vData && (this.callAppOpts.params.data_vdotype = window.toFind ? "short" : "long", this.callAppOpts.params.data_logver = "v2"), this.exdUrl ? (this.callAppOpts.downloadUrl = this.exdUrl, p.default.download(this.callAppOpts)) : p.default.gotoPage(this.callAppOpts)
-                        }
+                       
                     }
                 }, {
                     key: "toThousands",
