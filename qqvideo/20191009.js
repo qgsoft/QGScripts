@@ -10964,7 +10964,7 @@ var _typeof2 = 'function' == typeof Symbol && 'symbol' == typeof Symbol.iterator
   }),
   g = '808',
   _ = e.find('._vplus_name').text(),
-  w = 'tenvideo2://?action=53&rssId=' + h + '&rssName=' + _,
+  w = '' + h + '&rssName=' + _,
   y = a({
   }).model({
     confid: g
