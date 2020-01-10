@@ -8237,7 +8237,7 @@
            TXVPACKAGE: {
                value: {
                    name: "腾讯视频",
-                   icon: "http://i.gtimg.cn/qqlive/images/20150608/logo_app.png",
+                   icon: "",
                    pkg: r.os.iphone ? "com.tencent.live4iphone" : "com.tencent.qqlive",
                    pkgurl: "",
                    scheme: r.os.ipad ? "" : "",
