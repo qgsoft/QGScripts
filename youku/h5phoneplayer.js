@@ -2858,32 +2858,9 @@
             L = "",
             O = {
                 gotoApp: function () {
-                    var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-                        e = l("cna");
-                    t.pathname = t.pathname ? t.pathname : "splash", t.params.action = t.params.action ? t.params.action : "", t.params.ua = t.banParams && t.banParams.ua ? "" : m, t.params.refer = _.refer ? _.refer : t.params.refer, t.params.is_h5 = _.is_h5 || "1", t.params.ccts = t.banParams && t.banParams.ccts ? "" : (new Date).getTime(), t.params.cookieid = e || "", t.params.refer_url = location.href, t.params.tuid = _.tuid ? _.tuid : t.params.tuid, L = t.stopTransfer;
-                    var i = new d(P + t.pathname);
-                    "/" === i.pathname && (i.pathname = ""), t.params && n(i, t.params), r(i);
-                    var u = "";
-                    t.whiteList && t.whiteList.length > 0 && t.whiteList.forEach(function (t) {
-                        new RegExp(t).test(m) && (u = !0)
-                    });
-                    var h = "";
-                    t.storeList && t.storeList.length > 0 && t.storeList.forEach(function (t) {
-                        new RegExp(t).test(m) && (h = !0)
-                    });
-                    var c = v.isAndroid && y.isChrome && !y.isWebview,
-                        f = v.isAndroid && !!m.match(/samsung/i) && v.version.gte("4.3") && v.version.lt("4.5");
-                    !u && (c || f || t.forceIntent) && (i.hash = "Intent;scheme=" + i.protocol.replace(":", "") + ";package=" + k + ";end", i.protocol = "intent:");
-                    var p = v.isIPhone && v.version.gte("9.0");
-                    return C.track(t.params), u ? s(O.dealUrl(i), p) : h && v.isIOS ? a("https://itunes.apple.com/app/id336141475") : w ? v.isIPhone ? p && t.guide ? o(t) : a("https://itunes.apple.com/app/id336141475") : a(I + "&android_schema=" + encodeURIComponent(i.toString())) : !p || t.universalLinkState === !1 || T || A ? "intent:" === i.protocol ? setTimeout(function () {
-                        a(O.dealUrl(i))
-                    }, 100) : s(O.dealUrl(i), p) : o(t), O.dealUrl(i)
+                    
                 }, download: function () {
-                    var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
-                    if (t.downloadUrl) {
-                        var e = new d(t.downloadUrl);
-                        t.exdParams && n(e, t.exdParams), r(e), e = e.toString(), a(e, t.replace)
-                    }
+                  
                 }, gotoPage: function () {
                     var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};
                     if (t = c({
@@ -7991,7 +7968,7 @@
                             if (e - t <= 5 && !this.netflag && !this.content_addata) return this.requestContentAd(), !1;
                             if (t >= e) return !0
                         }
-                        return !1
+                        return false
                     }
                 }, {
                     key: "_initAdPlayer",
@@ -9110,6 +9087,8 @@
                     value: function (t, e, i) {
                         if (this.destroy(), !t.ups || !t.video) return void l.default.e(this.TAG, "the data.ups is undefined,please check data");
                         if (this.password = e, this.client_id = i, this._copyData(t), this.totalTime = this.video.seconds, this.video.title = o.default.htmlEncodeAll(this.video.title), this.show && (this.show.title = o.default.htmlEncodeAll(this.show.title)), this.encodeId = this.video.encodeid, this.videoId = this.video.id, this.stream && !(this.stream.length < 1)) {
+                            //TODO: 排序一下， 最高清的放在最前面，默认播放第个
+                            this.stream.sort((a,b) => b.size > a.size);
                             var n = {
                                     lang: "默认",
                                     langcode: this.stream[0].audio_lang,
@@ -9227,6 +9206,7 @@
                 }, {
                     key: "_dealWaterInfo",
                     value: function () {
+                        /*TODO: 不显示水印
                         if (this.watermark)
                             for (var t = 0, e = this.watermark.length; t < e; t++) {
                                 var i = parseInt(this.watermark[t].type),
@@ -9235,6 +9215,7 @@
                                 for (var a in s) this.watermark[t][a] = s[a];
                                 this.watermark[t].displayDTOS = null, 1 !== i && 0 !== i && 4 !== i && 5 !== i || (1 === n ? this.waterInfo.logo.fullScreen = this.watermark[t] : 0 === n && (this.waterInfo.logo.normal = this.watermark[t])), 3 === i && (1 === n ? this.waterInfo.license.fullScreen = this.watermark[t] : 0 === n && (this.waterInfo.license.normal = this.watermark[t])), 2 === i && (1 === n ? this.waterInfo.register.fullScreen = this.watermark[t] : 0 === n && (this.waterInfo.register.normal = this.watermark[t]))
                             }
+                        */
                     }
                 }, {
                     key: "getVideoInfo",
@@ -9281,7 +9262,7 @@
                     key: "getUserInfo",
                     value: function () {
                         var t = {};
-                        return this.user && (t.uid = this.user.uid, t.vip = this.user.vip, t.ip = this.user.ip, t.ytid = this.user.ytid), this.vip && (t.ad = this.vip.ad, t.acc_support = this.vip.acc_support, t.acc_pen = this.vip.acc_open, t.hd3 = this.vip.hd3, t.note = this.vip.note, t.reason = this.vip.reason, t.link = this.vip.link), t
+                        return this.user && (t.uid = this.user.uid, t.vip = this.user.vip, t.ip = "127.0.0.1", t.ytid = this.user.ytid), this.vip && (t.ad = this.vip.ad, t.acc_support = this.vip.acc_support, t.acc_pen = this.vip.acc_open, t.hd3 = this.vip.hd3, t.note = this.vip.note, t.reason = this.vip.reason, t.link = this.vip.link), t
                     }
                 }, {
                     key: "getPayInfo",
@@ -9519,6 +9500,7 @@
                 }, {
                     key: "sendTSLog",
                     value: function (t) {
+                        /*
                         var e = 5;
                         this.tsSn >= 24 ? e = 20 : this.tsSn >= 12 && (e = 10);
                         var i = this;
@@ -9535,6 +9517,7 @@
                             var r = "";
                             r = "0505" === this.ccode ? l.REPORT_API.TUDOU.TSLOG + "?" : l.REPORT_API.ALI.TSLOG + "?", r += o.default.urlParameter(n), r += "&" + o.default.urlParameter(this.tslogextParam), o.default.sendlog(r), this.tsSn++
                         }
+                        */
                     }
                 }, {
                     key: "tsInit",
@@ -9660,10 +9643,12 @@
                 }, {
                     key: "sendErrorLog",
                     value: function (t, e) {
+                        /*
                         var i = {};
                         i.track_view_code = t, i.utid = this.cna, i.ccode = this.ccode, i.ups_url = encodeURIComponent(e.upsUrl), i.cdn_url = encodeURIComponent(e.cdnUrl), i.is_ipurl = e.cdnUrl && o.default.testIsIPUrl(e.cdnUrl) ? 1 : 0, i.m3u8_url = e.m3u8Url ? encodeURIComponent(e.m3u8Url) : "", i.error_type = e.errorType, i.error_code = e.errorCode || "", i.error_position = e.currentTime ? e.currentTime : 0, i.user_timestamp = (new Date).getTime(), i.userid = this.pubParam.userid ? this.pubParam.userid : "", i.vip = this.pubParam.isvip ? this.pubParam.isvip : 0, i.player_version = "H5", i.version = _.default.version, i.logextvv = m.default.hex_md5(this._time), i.protocol = this.protocol, i.cdntype = this.pubParam.cdntype, i.cdnIsHttps = e.cdnUrl && e.cdnUrl.indexOf("https:") > -1 ? 1 : 0, i.psid = this.pubParam.psid;
                         var n = o.default.urlParameter(i);
                         this.sendGoldLog("/yt/youkuplayer.fdl.error", "EXP", n, "H1481495508")
+                        */
                     }
                 }, {
                     key: "sendGoldLog",
@@ -9684,6 +9669,7 @@
                 }, {
                     key: "sendPlayLog",
                     value: function (t) {
+                        /*
                         if (0 !== this.pubParam.uid || 1 !== t) {
                             var e = {
                                     umid: this.cna,
@@ -9710,6 +9696,7 @@
                             var n = l.PLAYLOGAPI + "?" + o.default.urlParameter(e);
                             o.default.sendlog(n)
                         }
+                        */
                     }
                 }, {
                     key: "sendFdlErrorLog",
@@ -9725,7 +9712,7 @@
                     key: "_initParam",
                     value: function () {
                         if (this._videoInfo) {
-                            this._videoInfo.user ? (this.pubParam.uid = this._videoInfo.user.ytid || this._videoInfo.user.uid || 0, this.pubParam.isvip = this._videoInfo.user.vip ? 1 : 0) : (this.pubParam.uid = 0, this.pubParam.isvip = 0), this.pubParam.frame = this._vvlogconfig && this._vvlogconfig.frame ? 1 : 0, this.pubParam.continous = this._vvlogconfig && this._vvlogconfig.continous ? 1 : 0, this.pubParam.ip = this._videoInfo.ups.ups_client_netip, this.pubParam.psid = this._videoInfo.ups.psid, this.pubParam.videoId = this._videoInfo.video.id, this.pubParam.encodeVideoId = this._videoInfo.video.encodeid, this.pubParam.paystate = this._getPayState(this._videoInfo.show), this.pubParam.playstate = this._videoInfo.trial ? 2 : 1, this.pubParam.cateId = this._videoInfo.video.category_id || "", this.pubParam.subcates = this._getSubCategories(this._videoInfo.video.subcategories), this.pubParam.userid = this._videoInfo.video.userid ? this._videoInfo.video.userid : "", this.pubParam.title = this._videoInfo.video.title, this.pubParam.totalsec = this._videoInfo.video.seconds;
+                            this._videoInfo.user ? (this.pubParam.uid = this._videoInfo.user.ytid || this._videoInfo.user.uid || 0, this.pubParam.isvip = this._videoInfo.user.vip ? 1 : 0) : (this.pubParam.uid = 0, this.pubParam.isvip = 0), this.pubParam.frame = this._vvlogconfig && this._vvlogconfig.frame ? 1 : 0, this.pubParam.continous = this._vvlogconfig && this._vvlogconfig.continous ? 1 : 0, this.pubParam.ip = '127.0.0.1', this.pubParam.psid = this._videoInfo.ups.psid, this.pubParam.videoId = this._videoInfo.video.id, this.pubParam.encodeVideoId = this._videoInfo.video.encodeid, this.pubParam.paystate = this._getPayState(this._videoInfo.show), this.pubParam.playstate = this._videoInfo.trial ? 2 : 1, this.pubParam.cateId = this._videoInfo.video.category_id || "", this.pubParam.subcates = this._getSubCategories(this._videoInfo.video.subcategories), this.pubParam.userid = this._videoInfo.video.userid ? this._videoInfo.video.userid : "", this.pubParam.title = this._videoInfo.video.title, this.pubParam.totalsec = this._videoInfo.video.seconds;
                             var t = this._videoInfo.hdcodes.join(",");
                             if (t.indexOf("hd3") > -1 ? this.pubParam.format = 3 : t.indexOf("hd2") > -1 ? this.pubParam.format = 2 : t.indexOf("mp4hd,") ? this.pubParam.format = 1 : this.pubParam.format = 0, this._videoInfo.show ? (this.pubParam.showflag = "1", this.pubParam.showId = this._videoInfo.show.id || "", this.pubParam.Copyright = this._videoInfo.show.copyright || 0, this.pubParam.stage = this._videoInfo.show.stage ? this._videoInfo.show.stage : 0, this.pubParam.show_videotype = this._videoInfo.show.video_type, this.pubParam.showChannelId = this.pubParam.cateId, this.pubParam.ocs = this.pubParam.subcates) : (this.pubParam.showId = "", this.pubParam.showflag = "0", this.pubParam.Copyright = 0, this.pubParam.stage = 0, this.pubParam.show_videotype = 1), this.pubParam.Type = 0, this._videoInfo.album) {
                                 var e = this._videoInfo.album;
