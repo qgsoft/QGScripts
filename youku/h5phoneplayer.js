@@ -708,7 +708,7 @@
                         var s = (new Date).getTime() + "";
                         this.mediaElementId = "xplayer" + s
                     } else u.default.e("the value of container id error,please check!!!");
-                    this.config = i, this.config.ccode || (this.config.ccode = "0501"), this.config.client_id || (this.config.client_id = "youkumobileplaypage"), this.control = this.config.control ? this.config.control : {}, i.purePlay && (this.control.loop = !0), this.supportType = this._getSupportType(), this.winType = this.config.winType ? this.config.winType : x.browser.isMobile ? "xplayer_m3u8" : "xplayer_h5", this.isThirdParty = this._isThirdParty(), this.control.beta ? h.default.setBetaUrl(this.control) : "", this.control.lang || (this.control.lang = "guoyu"), this.control.hd || (this.control.hd = "mp4hd"), this.error = !1, this._firstTag = !0, this._isAdPlaying = !1, this.currentTime = 0, this._frontAd = !1, this._replay = !1, this.isPause = !0, this.cna = h.default.getCna();
+                    this.config = i, this.config.ccode || (this.config.ccode = "0501"), this.config.client_id || (this.config.client_id = "youkumobileplaypage"), this.control = this.config.control ? this.config.control : {}, i.purePlay && (this.control.loop = !0), this.supportType = this._getSupportType(), this.winType = this.config.winType ? this.config.winType : x.browser.isMobile ? "xplayer_m3u8" : "xplayer_h5", this.isThirdParty = this._isThirdParty(), this.control.beta ? h.default.setBetaUrl(this.control) : "", this.control.lang || (this.control.lang = "guoyu"), this.control.hd || (this.control.hd = "mp4hd2v2"), this.error = !1, this._firstTag = !0, this._isAdPlaying = !1, this.currentTime = 0, this._frontAd = !1, this._replay = !1, this.isPause = !0, this.cna = h.default.getCna();
                     var a = {};
                     if (a.vid = i.videoId || "", a.ccode = i.ccode, a.client_ip = "0.0.0.0", a.app_ver = "1.0.0", this.config.param)
                         for (var o in this.config.param) this.config.param[o] && (a[o] = this.config.param[o]);
@@ -917,6 +917,7 @@
                     key: "_initControlInfo",
                     value: function () {
                         if (this._videoInfo.langcodes) {
+                            //this._videoInfo.stream.sort((a,b) => b.size > a.size);
                             var t = this.control,
                                 e = this._videoInfo.langcodes.join(",") + ",",
                                 i = t.lang;
@@ -9088,7 +9089,6 @@
                         if (this.destroy(), !t.ups || !t.video) return void l.default.e(this.TAG, "the data.ups is undefined,please check data");
                         if (this.password = e, this.client_id = i, this._copyData(t), this.totalTime = this.video.seconds, this.video.title = o.default.htmlEncodeAll(this.video.title), this.show && (this.show.title = o.default.htmlEncodeAll(this.show.title)), this.encodeId = this.video.encodeid, this.videoId = this.video.id, this.stream && !(this.stream.length < 1)) {
                             //TODO: 排序一下， 最高清的放在最前面，默认播放第个
-                            this.stream.sort((a,b) => b.size > a.size);
                             var n = {
                                     lang: "默认",
                                     langcode: this.stream[0].audio_lang,
@@ -9714,6 +9714,7 @@
                         if (this._videoInfo) {
                             this._videoInfo.user ? (this.pubParam.uid = this._videoInfo.user.ytid || this._videoInfo.user.uid || 0, this.pubParam.isvip = this._videoInfo.user.vip ? 1 : 0) : (this.pubParam.uid = 0, this.pubParam.isvip = 0), this.pubParam.frame = this._vvlogconfig && this._vvlogconfig.frame ? 1 : 0, this.pubParam.continous = this._vvlogconfig && this._vvlogconfig.continous ? 1 : 0, this.pubParam.ip = '127.0.0.1', this.pubParam.psid = this._videoInfo.ups.psid, this.pubParam.videoId = this._videoInfo.video.id, this.pubParam.encodeVideoId = this._videoInfo.video.encodeid, this.pubParam.paystate = this._getPayState(this._videoInfo.show), this.pubParam.playstate = this._videoInfo.trial ? 2 : 1, this.pubParam.cateId = this._videoInfo.video.category_id || "", this.pubParam.subcates = this._getSubCategories(this._videoInfo.video.subcategories), this.pubParam.userid = this._videoInfo.video.userid ? this._videoInfo.video.userid : "", this.pubParam.title = this._videoInfo.video.title, this.pubParam.totalsec = this._videoInfo.video.seconds;
                             var t = this._videoInfo.hdcodes.join(",");
+                            debugger;
                             if (t.indexOf("hd3") > -1 ? this.pubParam.format = 3 : t.indexOf("hd2") > -1 ? this.pubParam.format = 2 : t.indexOf("mp4hd,") ? this.pubParam.format = 1 : this.pubParam.format = 0, this._videoInfo.show ? (this.pubParam.showflag = "1", this.pubParam.showId = this._videoInfo.show.id || "", this.pubParam.Copyright = this._videoInfo.show.copyright || 0, this.pubParam.stage = this._videoInfo.show.stage ? this._videoInfo.show.stage : 0, this.pubParam.show_videotype = this._videoInfo.show.video_type, this.pubParam.showChannelId = this.pubParam.cateId, this.pubParam.ocs = this.pubParam.subcates) : (this.pubParam.showId = "", this.pubParam.showflag = "0", this.pubParam.Copyright = 0, this.pubParam.stage = 0, this.pubParam.show_videotype = 1), this.pubParam.Type = 0, this._videoInfo.album) {
                                 var e = this._videoInfo.album;
                                 this.pubParam.Type = 1, this.pubParam.playListId = e.id, this.pubParam.folderOwnerId = e.owner_id, this.pubParam.fob = this._vvlogconfig && this._vvlogconfig.order ? this._vvlogconfig.order : 1, this.pubParam.fpo = 0, this._player._videoInfo.videos && (this.pubParam.fpo = this._player._videoInfo.videos.next ? parseInt(this._player._videoInfo.videos.next.seq) - 1 : this._player._videoInfo.videos.previous ? parseInt(this._player._videoInfo.videos.previous.seq) : 0), this.pubParam.fcs = this.pubParam.subcates, this.pubParam.playListChannelId = this.pubParam.cateId, this.pubParam.stage = e.total
