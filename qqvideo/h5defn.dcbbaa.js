@@ -1,6 +1,6 @@
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
- * Powered by Tencent-Video Web Front End Team 修改了播放器右上角不会提示观看完整版的LOGO
+ * Powered by Tencent-Video Web Front End Team
  */
 ! function (a) {
     function b(d) {
@@ -91,7 +91,7 @@
         a.exports = '<div data-role="<%=definitionLayer%>" class="txp_overlay_hint <%=hideClass%>">\n    <style>\n        .txp_defn_wrap{\n            text-align: center;\n        }\n        .txp_defn_selected{\n            border: 1px solid #ff7000;\n            border-radius: 35px;\n            padding: 5px 15px !important;\n            color:#ff7000;\n            background:black\n\n        }\n        .txp_defn_btn{\n            margin-bottom: 5px;\n            padding: 6px 15px;\n\n        }\n    </style>\n    <div class="txp_defn_wrap">\n            <div class="txp_defn_selected txp_defn_btn">\u6807\u6e05</div>          \n    </div>\n    \n    \n\t<a data-role="<%=definitionOpenapp%>" href="javascript:;" class="tvp_btn_normal"></a>\n</div>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -131,11 +131,13 @@
             }, remove: function () {
                 this.dataset.$fullscreenBtn.remove()
             }, toggleFullScreen: function () {
-                this.dataset.isFakeFullsreen ? (e.log("\u4f7f\u7528\u4f2a\u5168\u5c4f"), this.context.dataset.isBrowserFullscreen ? this.exitBrowserFullscreen() : this.enterBrowserFullscreen()) : (e.log("\u4f7f\u7528\u7cfb\u7edf\u5168\u5c4f"), this.context.dataset.isWindowFullscreen ? this.exitWindowFullscreen() : this.enterWindowFullscreen())
+                //this.dataset.isFakeFullsreen ? (e.log("\u4f7f\u7528\u4f2a\u5168\u5c4f"), this.context.dataset.isBrowserFullscreen ? this.exitBrowserFullscreen() : this.enterBrowserFullscreen()) : (e.log("\u4f7f\u7528\u7cfb\u7edf\u5168\u5c4f"), this.context.dataset.isWindowFullscreen ? this.exitWindowFullscreen() : this.enterWindowFullscreen())
+                this.context.dataset.isWindowFullscreen ? this.exitWindowFullscreen() : this.enterWindowFullscreen()
             }, requestFullScreen: function (a, b, c) {
                 a = a || this.dataset.$fullscreenContainer, b = b || "enter", "enter" === b ? (c = a.requestFullscreen || a.mozRequestFullScreen || a.webkitRequestFullscreen || a.webkitRequestFullscreen, c || (a = document, c = a.requestFullscreen || a.mozRequestFullScreen || a.webkitRequestFullscreen || a.webkitRequestFullscreen)) : (c = a.cancelFullScreen || a.mozCancelFullScreen || a.webkitCancelFullScreen || a.exitFullscreen || a.webkitExitFullscreen, c || (a = document, c = a.cancelFullScreen || a.mozCancelFullScreen || a.webkitCancelFullScreen || a.exitFullscreen || a.webkitExitFullscreen));
                 try {
-                    c ? e.os.android ? "enter" === b && this.context.msg.broadcast("videoRequestFullScreen") : c.call(a) : this.context.msg.broadcast("enter" === b ? "videoRequestFullScreen" : "videoExitFullScreen")
+                    b === "enter" ? this.context.msg.broadcast("videoRequestFullScreen")  : this.context.msg.broadcast("videoExitFullScreen") 
+                    //c ? e.os.android ? "enter" === b && this.context.msg.broadcast("videoRequestFullScreen") : c.call(a) : this.context.msg.broadcast("enter" === b ? "videoRequestFullScreen" : "videoExitFullScreen")
                 } catch (d) {
                     e.showError("requestFullScreen error", d), this.context.msg.broadcast("reportError", {
                         msg: d.message,
@@ -148,10 +150,10 @@
                 return a
             }, exitWindowFullscreen: function (a) {
                 var b = this;
-                b.dataset.$fullscreenBtn.attr("data-status", !1), b.context.dataset.isWindowFullscreen = !1, a || b.requestFullScreen(null, "exit")
+                b.dataset.$fullscreenBtn.attr("data-status", !1), b.context.dataset.isWindowFullscreen = !1, b.requestFullScreen(null, "exit")
             }, enterWindowFullscreen: function (a) {
                 var b = this;
-                b.context.dataset.isWindowFullscreen = !0, a || b.requestFullScreen(null, "enter")
+                b.context.dataset.isWindowFullscreen = !0,  b.requestFullScreen(null, "enter")
             }, enterBrowserFullscreen: function () {
                 var a = this;
                 this.context.msg.broadcast("enterBrowserFullscreen"), a.context.$mod.$playermod.addClass(a.dataset.browserFullscreenClass), a.dataset.$fullscreenBtn.attr("data-status", "true"), a.context.dataset.isBrowserFullscreen = !0, a.context.msg.broadcast("screenChange", !0, !0), a.context.msg.broadcast("resize", {
@@ -167,7 +169,9 @@
             }, addEventListerner: function () {
                 var a = this;
                 this.dataset.$fullscreenBtn.on(Txplayer.dataset.clickEventName, function () {
-                    a.context.dataset.isBrowserFullscreen ? a.exitBrowserFullscreen() : a.toggleFullScreen(), a.context.userMsg.broadcast("fullClick", a.context.dataset.isWindowFullscreen || a.context.dataset.isBrowserFullscreen)
+                    //a.context.dataset.isBrowserFullscreen ? a.exitBrowserFullscreen() : a.toggleFullScreen(),
+                    a.toggleFullScreen();
+                    a.context.userMsg.broadcast("fullClick", a.context.dataset.isWindowFullscreen || a.context.dataset.isBrowserFullscreen)
                 }), this.dataset.isFakeFullsreen || Txplayer.$(document).on("webkitfullscreenchange mozfullscreenchange fullscreenchange MSFullscreenChange", function (b) {
                     a.context.dataset.isWindowFullscreen = a.isFullScreen(), a.context.userMsg.broadcast("windowFullscreenChange", a.context.dataset.isWindowFullscreen), a.context.msg.broadcast("windowFullscreenChange", a.context.dataset.isWindowFullscreen), a.context.dataset.isWindowFullscreen ? a.enterWindowFullscreen(!1) : a.exitWindowFullscreen(!1)
                 }), this.context.msg.on("screenChange", function (b, c) {
@@ -222,7 +226,7 @@
         a.exports = c
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -902,7 +906,7 @@
                         a.loadVideoUrls()
                     }
                 }, this.context.msg.on("videoEnd", function (b) {
-                    b.playListTypeEnd && "film" === b.playListType && (a.dataset.hasVideoPlayed = !1, a.dataset.hasLoadVideoUrl = !1, a.context.dataset.getinfoJSON = null), b.playListType && "film" === b.playListType || (a.updateCurrentTime(0, "videoEnd"), a.context.msg.broadcast("videoTimeUpdate"))
+                    b.playListTypeEnd && "film" === b.playListType && (a.dataset.hasVideoPlayed = !1, a.dataset.hasLoadVideoUrl = !1, a.context.dataset.getinfoJSON = null, a.dataset.hasRequestloadingAd = !1), b.playListType && "film" === b.playListType || (a.updateCurrentTime(0, "videoEnd"), a.context.msg.broadcast("videoTimeUpdate"))
                 }), this.context.msg.on("vidChange", function () {
                     a.dataset.hasVideoPlayed = !1, a.dataset.hasLoadVideoUrl = !1, a.context.dataset.getinfoJSON = null, a.context.dataset.isLoadingAdEmpty = null, a.dataset.hasRequestloadingAd = null, a.context.dataset.currentTime = 0, a.dataset.idReplay = !0
                 }), this.context.msg.on("beforeVideoRePlay", function () {
@@ -918,9 +922,14 @@
                 }), this.context.msg.on("mobileSwitchDefn", function (b) {
                     a.changeDefn(b)
                 })
+            }, replay: function () {
+                var a = this;
+                a.context.msg.broadcast("beforeVideoRePlay"), a.context.msg.broadcast("androidHack"), a.context.msg.broadcast("playControl", {
+                    autoplay: !0
+                })
             }, exportsModuleApis: function () {
                 var a = this;
-                this.dataset.moduleApis = {}, this.dataset.moduleApis.pause = this.pause.bind(this), this.dataset.moduleApis.play = this.play.bind(this), this.dataset.moduleApis.togglePlayPause = this.togglePlayPause.bind(this), this.dataset.moduleApis.seekTo = this.seekTo.bind(this), this.dataset.moduleApis.load = this.load.bind(this), this.dataset.moduleApis.getVid = this.getVid.bind(this), this.dataset.moduleApis.getCid = this.getCid.bind(this), this.dataset.moduleApis.getColumnId = this.getColumnId.bind(this), this.dataset.moduleApis.getDuration = this.getDuration.bind(this), this.dataset.moduleApis.getCurrentTime = this.getCurrentTime.bind(this), this.dataset.moduleApis.getVideoSize = this.getVideoSize.bind(this), this.dataset.moduleApis.getPlayerType = a.getPlayerType.bind(this), this.dataset.moduleApis.getVideoType = a.getVideoType.bind(this), this.dataset.moduleApis.getDefinition = a.getDefinition.bind(this), this.dataset.moduleApis.changeDefn = a.changeDefn.bind(this), this.dataset.moduleApis.showError = a.showError.bind(this), f.extend(this.context.userApi, this.dataset.moduleApis), this.dataset.privateApis = {}, this.dataset.privateApis.playControl = this.play.bind(this), this.dataset.privateApis.seekTo = this.seekTo.bind(this), f.each(this.dataset.privateApis, function (b, c) {
+                this.dataset.moduleApis = {}, this.dataset.moduleApis.pause = this.pause.bind(this), this.dataset.moduleApis.play = this.play.bind(this), this.dataset.moduleApis.replay = this.replay.bind(this), this.dataset.moduleApis.togglePlayPause = this.togglePlayPause.bind(this), this.dataset.moduleApis.seekTo = this.seekTo.bind(this), this.dataset.moduleApis.load = this.load.bind(this), this.dataset.moduleApis.getVid = this.getVid.bind(this), this.dataset.moduleApis.getCid = this.getCid.bind(this), this.dataset.moduleApis.getColumnId = this.getColumnId.bind(this), this.dataset.moduleApis.getDuration = this.getDuration.bind(this), this.dataset.moduleApis.getCurrentTime = this.getCurrentTime.bind(this), this.dataset.moduleApis.getVideoSize = this.getVideoSize.bind(this), this.dataset.moduleApis.getPlayerType = a.getPlayerType.bind(this), this.dataset.moduleApis.getVideoType = a.getVideoType.bind(this), this.dataset.moduleApis.getDefinition = a.getDefinition.bind(this), this.dataset.moduleApis.changeDefn = a.changeDefn.bind(this), this.dataset.moduleApis.showError = a.showError.bind(this), f.extend(this.context.userApi, this.dataset.moduleApis), this.dataset.privateApis = {}, this.dataset.privateApis.playControl = this.play.bind(this), this.dataset.privateApis.seekTo = this.seekTo.bind(this), f.each(this.dataset.privateApis, function (b, c) {
                     a.context.msg.on(b, c)
                 })
             }, canAutoplay: function () {
@@ -1000,8 +1009,8 @@
                 var b, c = {},
                     d = ["av.video.qq.com", "bkvv.video.qq.com", "h5vv.video.qq.com"],
                     e = a.retryTimes ? a.retryTimes - 1 : 0;
-                return Txplayer.util.mobile ? location.href.indexOf("debugvideomark=1") > -1 ? c.domain = "testvv.video.qq.com" : c.domain = "h5vv.video.qq.com" : c.domain = "vv.video.qq.com", a.retry && (Txplayer.util.mobile ? c.domain = "bkh5vv.video.qq.com" : c.domain = d[e] || d[0]), "getinfo" === c.type && (i.browser.mqq || i.browser.wechat) && "view.inews.qq.com" === location.hostname && (c.domain = "h5wx.video.qq.com"), !a.retry && this.gContext && this.gContext.dataset && this.gContext.dataset.businessId && (this.gContext.dataset.authext || this.gContext.dataset.authfrom) && ("11" == this.gContext.dataset.businessId || this.gContext.dataset.businessId >= 200) && (c.domain = "sv.video.qq.com"),
-                    "http:" === location.protocol ? c.protocol = "http:" : c.protocol = "https:", "getinfo" === a.type ? c.path = "/getinfo?" : "getvinfo" === a.type ? c.path = "/getvinfo?" : "getkey" === a.type && (c.path = "/getkey?"), b = c.protocol + "//" + c.domain + c.path, a.disableCallback || (b += "callback=?&"), b
+                return Txplayer.util.mobile ? location.href.indexOf("debugvideomark=1") > -1 ? c.domain = "testvv.video.qq.com" : c.domain = "h5vv.video.qq.com" : c.domain = "vv.video.qq.com", a.retry && (Txplayer.util.mobile ? c.domain = "bkh5vv.video.qq.com" : c.domain = d[e] || d[0]),
+                    "getinfo" === c.type && (i.browser.mqq || i.browser.wechat) && "view.inews.qq.com" === location.hostname && (c.domain = "h5wx.video.qq.com"), !a.retry && this.gContext && this.gContext.dataset && this.gContext.dataset.businessId && (this.gContext.dataset.authext || this.gContext.dataset.authfrom) && ("11" == this.gContext.dataset.businessId || this.gContext.dataset.businessId >= 200) && (c.domain = "sv.video.qq.com"), "http:" === location.protocol ? c.protocol = "http:" : c.protocol = "https:", "getinfo" === a.type ? c.path = "/getinfo?" : "getvinfo" === a.type ? c.path = "/getvinfo?" : "getkey" === a.type && (c.path = "/getkey?"), b = c.protocol + "//" + c.domain + c.path, a.disableCallback || (b += "callback=?&"), b
             }, getPcVideoMp4Url: function (a) {
                 function b(a, b) {
                     if (0 === b) return a;
@@ -1619,7 +1628,7 @@
                 }
             }, {
                 reg: function () {
-                    return !!(f.browser.qqnews && !f.browser.qqnewsAd || f.browser.kuaibao)
+                    return !!f.browser.kuaibao
                 }, request: function (a) {
                     var b, c, d, e = this,
                         g = e.cfg.vid,
@@ -1656,12 +1665,14 @@
                     };
                     var l = function () {
                             var a = {
-                                method: "getCKey",
-                                types: ["string", "string", "string"],
-                                args: [g, h, i],
-                                instanceName: "TencentNewsScriptControllerJsInterface"
-                            };
-                            window.prompt(JSON.stringify(a))
+                                    method: "getCKey",
+                                    types: ["string", "string", "string"],
+                                    args: [g, h, i],
+                                    instanceName: "TencentNewsScriptControllerJsInterface"
+                                },
+                                b = "jsbridge://get_with_json_data?json=" + encodeURIComponent(JSON.stringify(a)) + "&_t=" + h,
+                                c = new Image;
+                            c.src = b
                         },
                         m = function () {
                             var a = function () {
@@ -1674,6 +1685,63 @@
                             })
                         };
                     f.os.ios ? m() : f.os.android ? l() : a.reject()
+                }
+            }, {
+                reg: function () {
+                    return !(!f.browser.qqnews || f.browser.qqnewsAd)
+                }, request: function (a) {
+                    var b, c, d, g = this,
+                        h = g.cfg.vid,
+                        i = "undefined" != typeof g.cfg.svr_time ? g.cfg.svr_time + "" : parseInt(+new Date / 1e3) + "",
+                        j = "TVP_KUAIBAO_CB_" + i.substr(-4, 4);
+                    if (window.top !== window) {
+                        try {
+                            var k = window.top.location.href;
+                            k && (b = window.top, c = b.document)
+                        } catch (l) {
+                            d = !0
+                        }
+                        if (d) return void a.reject()
+                    } else b = window, c = b.document;
+                    b[j] = function (b) {
+                        var c;
+                        try {
+                            c = JSON.parse(b)
+                        } catch (d) {}
+                        if (c && c.key && c.ver && c.platform && c.sdtfrom) {
+                            var e = {
+                                param: {
+                                    cKey: c.key,
+                                    encryptVer: c.ver,
+                                    platform: c.platform,
+                                    sdtfrom: c.sdtfrom,
+                                    vid: g.cfg.vid,
+                                    defaultfmt: "mp4",
+                                    clip: 4
+                                }
+                            };
+                            a.resolve(e)
+                        } else a.reject()
+                    };
+                    var m = function () {
+                            var a = function () {
+                                window.TencentNews.invoke("getCKey", h, i, j)
+                            };
+                            window.TencentNews && window.TencentNews.invoke ? a() : e.getScript("//mat1.gtimg.com/www/js/newsapp/jsapi/news.js?_tsid=1", function () {
+                                window.TencentNews && window.TencentNews.invoke && a()
+                            })
+                        },
+                        n = function () {
+                            var a = function () {
+                                b.getBrowserSignature(h, i, j)
+                            };
+                            "function" == typeof b.getBrowserSignature ? (a(), c.addEventListener("TencentNewsJSInjectionComplete", function () {
+                                a()
+                            })) : c.addEventListener("TencentNewsJSInjectionComplete", function () {
+                                a()
+                            })
+                        };
+                    f.os.ios ? n() : f.os.android ? m() : a.reject()
                 }
             }, {
                 reg: function () {
@@ -1836,7 +1904,7 @@
         }, a.exports = d
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -1928,7 +1996,7 @@
         }, Txplayer.register("UiContinuePlay", c)
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2022,7 +2090,7 @@
         a.exports = '<div class="txp_appbar">\n    <a class="txp_app_btn" data-role="txp-h5-downloadBanner" href="javascript:;">\n        <div class="txp_progress">\n            <div class="txp_progress_current" data-role="txp-h5-downloadBannerPro"></div>\n        </div>\n        <div class="txp_btn_text" data-text="" data-role="txp-h5-downloadBannerText">\n            <div class="txp_app_logo"></div>\n        </div>\n    </a>\n</div>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2153,7 +2221,7 @@
         a.exports = '<div class="txp_appbar txp_appbar_follow">\n    <a class="txp_app_btn" data-status="open" href="javascript:;" data-role="txp-h5-followOpenBanner">\n        <div class="txp_progress">\n            <div class="txp_progress_current"></div>\n        </div>\n        <div class="txp_btn_text" data-role="txp-h5-followOpenBanner-text">\n            <div class="txp_app_logo"></div>\n        </div>\n    </a>\n    <a class="txp_app_btn_follow" href="javascript:;" data-status="follow" data-role="txp-h5-followBanner">\n        <div class="txp_follow_text">\u52a0\u5165\u770b\u5355</div>\n    </a>\n</div>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2257,7 +2325,7 @@
         a.exports = '<div data-role="<%=pauseLayer%>" class="txp_appbanner txp_appbanner_pause <%=hideClass%>">\n\t<div class="txp_banner_inner">\n\t\t<div class="txp_app_logo" style="background-image:url(//i.gtimg.cn/qqlive/images/20150608/logo_app.png )"></div>\n\t\t<div class="txp_app_wording">\n\t\t\t<div class="txp_wording_title" data-text="\u89c2\u770b\u66f4\u591a\u7cbe\u5f69\u5c0f\u89c6\u9891"></div>\n\t\t\t<div class="txp_wording_desc" data-text="\u4e0b\u8f7d\u817e\u8baf\u89c6\u9891"></div>\n\t\t</div>\n\t\t<div data-role="<%=status%>" class="txp_app_btn" data-status="down" >\n\t\t\t<div class="txp_progress">\n\t\t\t\t<div class="txp_progress_current" data-role="<%=progress%>"></div>\n\t\t\t</div>\n\t\t\t<a data-role="<%=btn%>" class="txp_btn_text" data-text="\u5b89\u88c5" href="javascript:;"></a>\n\t\t</div>\n\t</div>\n</div>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2300,7 +2368,9 @@
                 this.context.dataset.$playermod.append(b), this.dataset.$fullBtn = this.context.dataset.$playermod.find('[data-role="' + a.fullBtn + '"]')
             }, remove: function () {
                 this.dataset.$fullBtn && this.dataset.$fullBtn.remove()
-            }, show: function () {}, hide: function () {
+            }, show: function () {
+                //this.context.dataset.fullBannerShowed = !0, this.dataset.reported || (this.stepReport(this.dataset.downloadState), this.dataset.reported = !0), this.dataset.$fullBtn.removeClass(Txplayer.dataset.hideClass)
+            }, hide: function () {
                 this.dataset.$fullBtn.addClass(Txplayer.dataset.hideClass)
             }, updateBanner: function (a) {
                 1 == a ? this.dataset.downloadState = 6 : 2 == a ? this.dataset.downloadState = 1 : a == -1 && (this.dataset.downloadState = 1), this.bindClickReport()
@@ -2345,7 +2415,7 @@
         a.exports = '<a data-role="<%=fullBtn%>" class="txp_btn_full txp_btn_full_top <%=hideClass%>">\u770b\u5b8c\u6574\u7248</a>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2442,7 +2512,7 @@
         a.exports = '<txpdiv class="txp_download_helper txp_none" data-status="down" data-role="txp-h5-topBanner">\n    <txpdiv class="txp_dl_text" data-role="txp-h5-topBannerText"></txpdiv>\n    <txpdiv class="txp_progress txp_none" data-role="txp-h5-topBannerPro"><txpdiv class="txp_progress_current"></txpdiv></txpdiv>\n</txpdiv>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2654,7 +2724,7 @@
         a.exports = '<a class="txp_related_item" data-vid="<%=vid%>" data-cid="<%=cid%>">\n    <txpdiv class="txp_related_image" style="background-image:url(<%=imgUrl%>)"></txpdiv>\n    <txpdiv class="txp_related_title"><%=title%></txpdiv>\n</a>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2786,7 +2856,7 @@
         }, Txplayer.register("TinyRcdBanner", d)
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -2911,7 +2981,7 @@
         a.exports = '<txpdiv class="txp_hint_toast txp_none" data-role="<%=limitLayer%>">\n    <!--\u4e0b\u8f7d\u63d0\u793a-->\n    <txpdiv class="txp_hint_bait txp_none" data-role="<%=btn%>">\n        \u7f51\u901f\u4e0d\u597d\uff0c<span data-role="<%=text%>">\u6253\u5f00</span>App\u63d0\u9ad8<txpdiv class="txp_hl">3\u500d\u6d41\u7545\u5ea6</txpdiv>\u54e6\uff01\n    </txpdiv>\n    <!-- \u4e0b\u8f7d\u8fdb\u5ea6 -->\n    <txpdiv class="txp_hint_dl txp_none" data-role="<%=progress%>">\n        <txpdiv class="txp_hint_txt">\u6b63\u5728\u4e0b\u8f7d <span data-role="<%=percent%>"></span> </txpdiv>\n        <txpdiv class="txp_hint_progress">\n            <txpdiv class="txp_hint_progress_current" data-role="<%=current%>"></txpdiv>\n        </txpdiv>\n    </txpdiv>\n</txpdiv>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -3034,7 +3104,7 @@
         a.exports = '<txpdiv class="txp_overlay_download txp_none" >\n    <txpdiv class="txp_dl_hint">\u6b63\u5728\u4e0b\u8f7d\u817e\u8baf\u89c6\u9891\uff0c\u9a6c\u4e0a\u5c31\u80fd\u89c2\u770b</txpdiv>\n    <txpdiv class="txp_dl_progress"><txpdiv class="txp_dl_progress_current"></txpdiv></txpdiv>\n</txpdiv>'
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -3221,162 +3291,13 @@
                 };
             return util.browser.wechat ? f() : util.browser.mqq ? g() : util.browser.mqqbrowser ? h() : b.resolve(c), b
         }, AppHelper.checkHasApp = function (a) {
-            a = a || {};
-            var b = -1,
-                c = Txplayer.$.Deferred();
-            util.os.ios || util.os.android || (b = -2, c.resolve(b)), a.appName || (a.appName = "qqlive");
-            var d = appConfig[a.appName],
-                e = function () {
-                    var a = function () {
-                        if (!top.WeixinJSBridge || !top.WeixinJSBridge.invoke) return void c.resolve(util.getData("txv-download-hasapp") || -1);
-                        var a = {
-                            packageUrl: d.packageUrl,
-                            packageName: d.packageName
-                        };
-                        top.WeixinJSBridge.invoke("getInstallState", a, function (a) {
-                            var d = a.err_msg;
-                            b = d.indexOf("get_install_state:yes") > -1 ? 1 : 2, util.setData("txv-download-hasapp", b), c.resolve(b)
-                        })
-                    };
-                    top && top.WeixinJSBridge || window.WeixinJSBridge ? a() : AppHelper.OnWechatReady().done(function () {
-                        a()
-                    }), setTimeout(function () {
-                        c.resolve(util.getData("txv-download-hasapp") || -1)
-                    }, 6e3)
-                },
-                f = function () {
-                    var a = util.os.ios ? d.packageUrl : d.packageName,
-                        e = function () {
-                            !util.os.ios && window.QQApi && window.QQApi.checkAppInstalled ? window.QQApi.checkAppInstalled(a, function (a) {
-                                b = a && 0 != a ? 1 : 2, util.setData("txv-download-hasapp", b), c.resolve(b)
-                            }) : window.mqq && window.mqq.app && window.mqq.app.isAppInstalled ? window.mqq.app.isAppInstalled(a, function (a) {
-                                b = "object" == typeof a ? a.result ? 1 : 2 : a ? 1 : 2, util.setData("txv-download-hasapp", b), c.resolve(b)
-                            }) : c.resolve(util.getData("txv-download-hasapp") || -1)
-                        };
-                    AppHelper.loadMqqAPI().done(function () {
-                        e()
-                    })
-                },
-                g = function () {
-                    !util.os.iphone && window.QQApi && QQApi.checkAppInstalled && f();
-                    var a = function () {
-                        window.x5 && x5.ios && x5.ios.getMobileAppSupport ? x5.ios.getMobileAppSupport({
-                            scheme: d.packageUrl
-                        }, function (a) {
-                            a ? (b = 1 == a.isSupportApp ? 1 : 2, c.resolve(b)) : c.resolve(-1)
-                        }, function () {
-                            c.resolve(-1)
-                        }) : c.resolve(-1), setTimeout(function () {
-                            c.resolve(-1)
-                        }, 300)
-                    };
-                    if (!util.os.iphone && window.x5mtt && window.x5mtt.isApkInstalled) {
-                        var e = window.x5mtt.isApkInstalled('{"packagename": "com.tencent.qqlive"}');
-                        b = e == -1 ? 2 : 1, c.resolve(b)
-                    } else util.os.iphone && parseInt(util.os.version) > 5 ? AppHelper.loadMqqBrowserAPI().done(function () {
-                        a()
-                    }).fail(function () {
-                        c.resolve(-1)
-                    }) : c.resolve(-1);
-                    setTimeout(function () {
-                        c.resolve(-1)
-                    }, 3e3)
-                };
-            return util.browser.wechat ? e() : util.browser.mqq ? f() : util.browser.mqqbrowser ? g() : c.resolve(-1), c
         }, AppHelper.check = function () {
-            isChecking || checked || (isChecking = !0, AppHelper.checkHasApp().done(function (a) {
-                util.log("app-helper checkHasApp", a), Txplayer.dataset.hasApp = a, Txplayer.msg.broadcast("onCheckHasApp", a)
-            }).always(function () {
-                isChecking = !1, checked = !0
-            }))
         }, AppHelper.getPromotionIdByPtag = function () {
-            var a = util.getPTAG() || "";
-            Txplayer.$.Deferred();
-            if (a) {
-                var b = " http://growth.video.qq.com/fcgi-bin/h5_player_ptag",
-                    c = {
-                        appid: 1,
-                        appkey: 1,
-                        ptag: a
-                    };
-                Txplayer.$.ajax({
-                    url: b,
-                    data: c,
-                    dataType: "jsonp",
-                    jsonpCallback: "getmd5_callback_" + parseInt(1e6 * Math.random())
-                }).then(function (a) {
-                    util.log(a)
-                })
-            }
-        }, AppHelper.getAppInfo = function (a) {
-            a = a || {};
-            var b = Txplayer.$.Deferred(),
-                c = {
-                    vid: a.vid || "",
-                    promotionId: a.promotionId || 140
-                },
-                d = "";
-            a.appName || (a.appName = "qqlive");
-            var e = appConfig[a.appName];
-            return c.openUrl = e.openUrl, c.downloadUrl = e.downloadUrl || "", c.appTitleName = e.appName, a.vid && (c.openUrl = c.openUrl.replace(/\$\{vid\}/gi, a.vid)), c.promotionId && (c.openUrl.indexOf("from=") > -1 ? c.openUrl = c.openUrl.replace(/\&from=(\d)+/, "&from=" + a.promotionId) : c.openUrl += "&from=" + a.promotionId, c.downloadUrl = c.downloadUrl.replace(/\$\{promotionId\}/gi, a.promotionId), c.downloaderUrl = c.downloadUrl), util.browser.miuibrowser && "xiaomiqj" === util.getPTAG() && (c.downloadUrl = "market://details?id=com.tencent.qqlive&startDownload=true&ref=app_free_migs&back=true"), util.browser.wechat ? (d = AppHelper.getWechatOpenid(), d && c.openUrl.indexOf("wxplugopenid=") === -1 && (c.openUrl += "&wxplugopenid=" + d), c.openUrl += "&callback=weixin%3A%2F%2F&sender=%e5%be%ae%e4%bf%a1", util.os.android ? AppHelper.getAppMd5(c.promotionId, a.appName).done(function (a) {
-                a && a.md5 && (c.md5 = a.md5, md5 = a.md5), b.resolve(c)
-            }).fail(function () {
-                c.md5 = "-1", b.resolve(c)
-            }) : b.resolve(c)) : util.browser.mqq ? (c.openUrl += "&callback=mqqapi%3A%2F%2F&sender=%E6%89%8B%E6%9C%BAQQ", c.appid = e.appId, c.packageName = e.packageName, c.via = e.VIA, b.resolve(c)) : b.resolve(c), b
+        }, AppHelper.getAppInfo = function (a) { 
         }, AppHelper.tryOpenApp = function (a) {
-            if (a && a.length && !util.browser.wechat && !util.browser.mqq) {
-                var b = a.attr("data-openurl"),
-                    c = a.attr("data-downloadurl");
-                if (b && c) {
-                    var d = function () {
-                            if (Txplayer.util.fiddlerLog("openApp"), util.os.ios && util.compareVersion(util.os.version, "9.0") > -1) try {
-                                Txplayer.util.fiddlerLog({
-                                    openurl: b,
-                                    s: "\u76f4\u63a5\u6253\u5f00"
-                                }), window.location.href = b
-                            } catch (a) {} else {
-                                Txplayer.util.fiddlerLog({
-                                    openurl: b,
-                                    s: "iframe\u6253\u5f00"
-                                });
-                                var a = document.createElement("iframe");
-                                a.style.cssText = "width:1px;height:1px;position:fixed;top:0;left:0;opacity:0;", a.src = b, document.body.appendChild(a)
-                            }
-                        },
-                        e = function () {
-                            Txplayer.util.fiddlerLog({
-                                downloadurl: c,
-                                s: "downloadApp"
-                            }), window.location.href = c
-                        },
-                        f = function () {
-                            d();
-                            var a = (new Date).valueOf();
-                            setTimeout(function () {
-                                var b = (new Date).valueOf();
-                                b - a < 1550 && e()
-                            }, 1500)
-                        };
-                    a.off("click.try-open-app").on("click.try-open-app", f)
-                }
-            }
         }, AppHelper.fixOpenUrl = function (vid, openUrl) {
-            if (!vid || !openUrl) return openUrl;
-            var re = eval("/(video_id=)([^&]*)/gi"),
-                nUrl = openUrl.replace(re, "video_id=" + vid);
-            return nUrl
         }, AppHelper.fixCidOpenUrl = function (cid, openUrl) {
-            if (cid && openUrl) {
-                var re = eval("/(video_id=)([^&]*)/gi"),
-                    nUrl = openUrl.replace(re, "cover_id=" + cid);
-                return nUrl
-            }
         }, AppHelper.fixFromOpenUrl = function (from, openUrl) {
-            if (from && openUrl) {
-                var re = eval("/(from=)([^&]*)/gi"),
-                    nUrl = openUrl.replace(re, "from=" + from);
-                return nUrl
-            }
         }, module.exports = AppHelper
     }, 31: function (a, b, c) {
         function d(a) {
@@ -3426,237 +3347,9 @@
             init: function () {
                 Txplayer.dataset.hasApp == -1 ? (Txplayer.dataset.downloadStatus = 1, this.tryOpenApp()) : f.browser.wechat ? this.WechatDownloader() : f.browser.mqq ? this.QQDownloader() : f.browser.mqqbrowser && this.QBDownloader()
             }, tryOpenApp: function () {
-                Txplayer.msg.on("triggerBanner", function (a) {
-                    if (!f.browser.wechat && !f.browser.mqq) {
-                        var b = a.openUrl,
-                            c = a.downloadUrl;
-                        if (b && c) {
-                            var d = function () {
-                                    if (Txplayer.util.fiddlerLog("openApp"), f.os.ios && f.compareVersion(f.os.version, "9.0") > -1) try {
-                                        Txplayer.util.fiddlerLog({
-                                            openUrl: b,
-                                            s: "\u76f4\u63a5\u6253\u5f00"
-                                        }), window.location.href = b
-                                    } catch (a) {} else {
-                                        Txplayer.util.fiddlerLog({
-                                            openUrl: b,
-                                            s: "iframe\u6253\u5f00"
-                                        });
-                                        var a = document.createElement("iframe");
-                                        a.style.cssText = "width:1px;height:1px;position:fixed;top:0;left:0;opacity:0;", a.src = b, document.body.appendChild(a)
-                                    }
-                                },
-                                e = function () {
-                                    Txplayer.util.fiddlerLog({
-                                        downloadUrl: c,
-                                        s: "downloadApp"
-                                    }), window.location.href = c
-                                },
-                                g = function () {
-                                    d();
-                                    var a = (new Date).valueOf();
-                                    setTimeout(function () {
-                                        var b = (new Date).valueOf();
-                                        b - a < 1550 && (f && f.browser && f.browser.qqlive || e())
-                                    }, 1500)
-                                };
-                            g()
-                        }
-                    }
-                })
             }, WechatDownloader: function () {
-                function a() {
-                    "undefined" != typeof WeixinJSBridge && WeixinJSBridge.on && (WeixinJSBridge.invoke && o(), document.addEventListener("wxdownloader:state_change", function (a) {
-                        b(a.detail)
-                    }), WeixinJSBridge.on("wxdownload:state_change", function (a) {
-                        document.dispatchEvent(new CustomEvent("wxdownloader:state_change", {
-                            detail: a
-                        }))
-                    }))
-                }
-
-                function b(a) {
-                    a && a.state && ("download_succ" != a.state || a.download_id != k && "" != a.download_id || (q(4), d(4), p(), d(5)), "default" == a.state, "downloading" == a.state, "download_fail" == a.state, "download_removed" == a.state && q(1))
-                }
-
-                function c() {
-                    Txplayer.msg.on("triggerBanner", function (a) {
-                        l.vid = a.vid, l.reportPromotionId = a.reportPromotionId, l.reportFrom = a.reportFrom, l.str5 = a.str5, l.guid = a.guid, e(a)
-                    })
-                }
-
-                function e(a) {
-                    var b = j[Txplayer.dataset.downloadStatus];
-                    switch (b) {
-                    case "open":
-                        n(a);
-                        break;
-                    case "install":
-                        m(a);
-                        break;
-                    case "downloading":
-                        i();
-                        break;
-                    case "pause":
-                    case "down":
-                        g(a)
-                    }
-                }
-
-                function g(a) {
-                    WeixinJSBridge.invoke("addDownloadTask", {
-                        task_name: a.appTitleName,
-                        task_url: a.downloaderUrl,
-                        file_md5: a.md5,
-                        thumb_url: "http://i.gtimg.cn/qqlive/images/20150608/logo_app.png"
-                    }, function (a) {
-                        var b = a.err_msg;
-                        b.indexOf("add_download_task:ok") > -1 ? (k = a.download_id, q(2)) : b.indexOf("add_download_task:cancel") > -1 && q(1)
-                    })
-                }
-
-                function i() {
-                    WeixinJSBridge.invoke("cancelDownloadTask", {
-                        download_id: k
-                    }, function (a) {
-                        var b = a.err_msg;
-                        b.indexOf("cancel_download_task:ok") > -1 && q(3)
-                    })
-                }
-
-                function m() {
-                    WeixinJSBridge.invoke("installDownloadTask", {
-                        download_id: k
-                    }, function (a) {
-                        var b = a.err_msg;
-                        b.indexOf("install_download_task:ok") > -1
-                    })
-                }
-
-                function n(a) {
-                    WeixinJSBridge.invoke("installDownloadTask", {
-                        download_id: k
-                    }, function (b) {
-                        var c = b.err_msg;
-                        c.indexOf("install_download_task:ok") > -1 || r(a.openUrl)
-                    })
-                }
-
-                function o() {
-                    WeixinJSBridge.invoke("queryDownloadTask", {
-                        download_id: k
-                    }, function (a) {
-                        b(a)
-                    })
-                }
-
-                function p() {
-                    WeixinJSBridge.invoke("getInstallState", {
-                        packageUrl: "tenvideo2://can_open_me_if_install_and_regeister_this_scheme",
-                        packageName: "com.tencent.qqlive"
-                    }, function (a) {
-                        var b = a.err_msg;
-                        b.indexOf("get_install_state:yes") > -1 ? (d(6), q(6)) : setTimeout(p, 5e3)
-                    })
-                }
-
-                function q(a) {
-                    Txplayer.dataset.downloadStatus = a, Txplayer.msg.broadcast("bannerDownloadStateChange")
-                }
-
-                function r(a) {
-                    f.browser.wechat.version && f.compareVersion(f.browser.wechat.version, "6.5.5") > -1 ? f.os.ipad ? WeixinJSBridge.invoke("launchApplication", {
-                        schemeUrl: a
-                    }, function (a) {
-                        "launchApplication:ok" != a.err_msg && f.log("open fail")
-                    }) : WeixinJSBridge.invoke("launchApplication", {
-                        appID: "wxca942bbff22e0e51",
-                        extInfo: a,
-                        parameter: a
-                    }, function (b) {
-                        "launchApplication:ok" != b.err_msg && h({
-                            appId: "wx5a3178167066897b"
-                        }, function () {
-                            wx.invoke("launchApplication", {
-                                appID: "wxca942bbff22e0e51",
-                                extInfo: a,
-                                parameter: a
-                            }, function (a) {
-                                "launchApplication:ok" != a.err_msg && f.log("open fail")
-                            })
-                        })
-                    }) : window.location.href = a
-                }
-                2 == Txplayer.dataset.hasApp ? (Txplayer.dataset.downloadStatus = 1, f.os.ios ? Txplayer.msg.on("triggerBanner", function (a) {
-                    a && a.downloadUrl && (window.location.href = a.downloadUrl)
-                }) : f.os.android && (window != top && (WeixinJSBridge = top.WeixinJSBridge), a(), c())) : 1 == Txplayer.dataset.hasApp && (Txplayer.dataset.downloadStatus = 6, Txplayer.msg.on("triggerBanner", function (a) {
-                    a && a.openUrl && r(a.openUrl)
-                }))
             }, QQDownloader: function () {
-                function a() {
-                    Txplayer.msg.on("triggerBanner", function (a) {
-                        l.vid = a.vid, l.reportPromotionId = a.reportPromotionId, l.reportFrom = a.reportFrom, l.str5 = a.str5, l.guid = a.guid, c(a)
-                    })
-                }
-
-                function b(a, c) {
-                    var e = {
-                        appid: c.appid,
-                        url: c.downloaderUrl,
-                        packageName: c.packageName,
-                        via: c.via,
-                        appName: c.appTitleName,
-                        actionCode: a
-                    };
-                    window.mqq.app.downloadApp(e, function (a) {
-                        a.state && (20 == a.state && (a.state = 2), !!i[a.state] && g(a.state, a), 4 == a.state && (d(4), d(5), b(5, c)), 6 == a.state && (d(6), g(6)))
-                    })
-                }
-
-                function c(a) {
-                    var c = j[Txplayer.dataset.downloadStatus];
-                    switch (c) {
-                    case "open":
-                        e(a);
-                        break;
-                    case "install":
-                        b(5, a);
-                        break;
-                    case "downloading":
-                        b(3, a);
-                        break;
-                    case "pause":
-                    case "down":
-                        b(2, a)
-                    }
-                }
-
-                function e(a) {
-                    mqq.app.checkAppInstalled && mqq.app.checkAppInstalled(a.packageName, function (c) {
-                        0 == c ? b(5) : (g(7), window.location.href = a.openUrl)
-                    })
-                }
-
-                function g(a, b) {
-                    Txplayer.dataset.downloadStatus = a, b && (Txplayer.dataset.downloadProcess = b.pro), Txplayer.msg.broadcast("bannerDownloadStateChange")
-                }
-                if (2 == Txplayer.dataset.hasApp) {
-                    if (Txplayer.dataset.downloadStatus = 1, f.os.ios) f.os.ios && Txplayer.msg.on("triggerBanner", function (a) {
-                        a && a.downloadUrl && (window.location.href = a.downloadUrl)
-                    });
-                    else if (f.os.android) {
-                        if (!window.mqq || !window.mqq.app || !window.mqq.app.downloadApp) return;
-                        a()
-                    }
-                } else 1 == Txplayer.dataset.hasApp && (Txplayer.dataset.downloadStatus = 6, Txplayer.msg.on("triggerBanner", function (a) {
-                    a && a.downloadUrl && (window.location.href = a.openUrl)
-                }))
             }, QBDownloader: function () {
-                2 == Txplayer.dataset.hasApp ? (Txplayer.dataset.downloadStatus = 1, Txplayer.msg.on("triggerBanner", function (a) {
-                    a && a.downloadUrl && (window.location.href = a.downloadUrl)
-                })) : 1 == Txplayer.dataset.hasApp && (Txplayer.dataset.downloadStatus = 6, Txplayer.msg.on("triggerBanner", function (a) {
-                    a && a.downloadUrl && (window.location.href = a.openUrl)
-                }))
             }
         }, a.exports = function () {
             var a;
@@ -4409,18 +4102,7 @@
             j = c(32);
         d.prototype = {
             stepReport: function (a) {
-                var b = this;
-                j.reportAppBanner({
-                    vid: b.dataset.vid || "",
-                    promotionId: b.context.dataset.promotionId,
-                    appCase: 1 == Txplayer.dataset.hasApp ? 3 : 1,
-                    reportStep: a,
-                    limitCase: "",
-                    reportFrom: b.context.dataset.reportFrom,
-                    guid: ""
-                })
             }, init: function (a) {
-                this.dataset.vid = a.vid, this.context.dataset.openUrl = a.openUrl, this.context.dataset.promotionId = a.promotionId || "140", this.context.dataset.reportFrom = a.reportFrom || "", this.addEventListener(), this.checkAppInstalled()
             }, initBanner: function (a) {
                 this.dataset.bannerWrapper = e(a.bannerWrapper).empty(), this.dataset.status = {
                     1: "down",
@@ -4525,7 +4207,7 @@
         }, Txplayer.register("H5PageBanner", d)
     }
 });
-/*! Txplayer - v3.0.0 - 2020-01-02 17:11:09
+/*! Txplayer - v3.0.0 - 2020-01-07 10:39:27
  * Copyright (c) 2020
  * Powered by Tencent-Video Web Front End Team
  */
@@ -4555,64 +4237,14 @@
             h = f.downloader || c(31);
         f.downloader = h, d.prototype = {
             init: function () {
-                this.dataset.vid = this.context.dataset.vid || this.context.config.vid, this.dataset.promotionId = this.context.config.promotionId || "140", this.dataset.reportFrom = this.context.config.reportFrom || "", this.addEventListener(), this.checkAppInstalled()
             }, checkAppInstalled: function () {
-                var a = this;
-                g.check(), a.context.msg.broadcast("beforeAppChecked", f.getData("txv-download-state") || 8), g.getAppInfo({
-                    vid: a.dataset.vid,
-                    promotionId: a.dataset.promotionId
-                }).done(function (b) {
-                    a.context.dataset.appData = b, a.dataset.hasApp = Txplayer.dataset.hasApp || null, null === a.dataset.hasApp ? Txplayer.msg.once("onCheckHasApp", function (b) {
-                        a.dataset.hasApp = b, a.context.msg.broadcast("appChecked", a.dataset.hasApp)
-                    }) : a.context.msg.broadcast("appChecked", a.dataset.hasApp)
-                })
+             
             }, onBannerClick: function (a) {
-                var b = {
-                    1: 2,
-                    2: 3,
-                    3: 2,
-                    4: 5,
-                    6: 7
-                };
-                this.stepReport({
-                    reportStep: b[Txplayer.dataset.downloadStatus],
-                    reportPromotionId: a.reportPromotionId,
-                    str5: a.str5 || ""
-                });
-                var c = e.extend({}, this.context.dataset.appData, {
-                    openUrl: this.openUrlFix(a),
-                    reportPromotionId: "859" == a.reportPromotionId || "860" == a.reportPromotionId || "87" == a.reportPromotionId ? a.reportPromotionId : this.context.config.promotionId || a.reportPromotionId || "140",
-                    reportFrom: this.dataset.reportFrom || "",
-                    str5: a.str5 || "",
-                    guid: this.context.dataset.guid || ""
-                });
-                Txplayer.msg.broadcast("triggerBanner", c)
+             
             }, openUrlFix: function (a) {
-                var b;
-                return b = a.openUrl ? a.openUrl : a.cid ? g.fixCidOpenUrl(a.cid, this.context.dataset.appData.openUrl) : g.fixOpenUrl(a.vid, this.context.dataset.appData.openUrl), b = "859" == a.reportPromotionId || "860" == a.reportPromotionId || "87" == a.reportPromotionId ? g.fixFromOpenUrl(a.reportPromotionId, b) : g.fixFromOpenUrl(this.context.config.promotionId || a.reportPromotionId || "140", b), b + "&jsapi=1"
             }, stepReport: function (a) {
-                var b = {
-                    vid: a.vid || this.context.dataset.vid,
-                    promotionId: "859" == a.reportPromotionId || "860" == a.reportPromotionId || "87" == a.reportPromotionId ? a.reportPromotionId : this.context.config.promotionId || a.reportPromotionId || "140",
-                    appCase: 1 === this.dataset.hasApp ? 3 : 1,
-                    reportStep: a.reportStep || "",
-                    limitCase: a.limitCase || "",
-                    reportFrom: this.dataset.reportFrom || "",
-                    str5: a.str5 || "",
-                    guid: this.context.dataset.guid || ""
-                };
-                this.context.msg.broadcast("reportAppBanner", b)
+                
             }, addEventListener: function () {
-                var a = this;
-                a.context.msg.on("bannerReport", function (b) {
-                    a.stepReport(b)
-                }), a.context.msg.on("bannerClick", function (b) {
-                    a.onBannerClick(b)
-                }), a.context.msg.on("appChecked", function () {
-                    f.downloader.initDownloader(), a.context.msg.broadcast("bannerDownloadStateChange", Txplayer.dataset.downloadStatus, Txplayer.dataset.downloadProcess), f.setData("txv-download-state", Txplayer.dataset.downloadStatus), Txplayer.msg.on("bannerDownloadStateChange", function () {
-                        f.setData("txv-download-state", Txplayer.dataset.downloadStatus), a.context.msg.broadcast("bannerDownloadStateChange", Txplayer.dataset.downloadStatus, Txplayer.dataset.downloadProcess)
-                    })
-                })
             }
         }, Txplayer.register("H5Downloader", d)
     },
@@ -4782,150 +4414,13 @@
                 };
             return util.browser.wechat ? f() : util.browser.mqq ? g() : util.browser.mqqbrowser ? h() : b.resolve(c), b
         }, AppHelper.checkHasApp = function (a) {
-            a = a || {};
-            var b = -1,
-                c = Txplayer.$.Deferred();
-            util.os.ios || util.os.android || (b = -2, c.resolve(b)), a.appName || (a.appName = "qqlive");
-            var d = appConfig[a.appName],
-                e = function () {
-                    var a = function () {
-                        if (!top.WeixinJSBridge || !top.WeixinJSBridge.invoke) return void c.resolve(util.getData("txv-download-hasapp") || -1);
-                        var a = {
-                            packageUrl: d.packageUrl,
-                            packageName: d.packageName
-                        };
-                        top.WeixinJSBridge.invoke("getInstallState", a, function (a) {
-                            var d = a.err_msg;
-                            b = d.indexOf("get_install_state:yes") > -1 ? 1 : 2, util.setData("txv-download-hasapp", b), c.resolve(b)
-                        })
-                    };
-                    top && top.WeixinJSBridge || window.WeixinJSBridge ? a() : AppHelper.OnWechatReady().done(function () {
-                        a()
-                    }), setTimeout(function () {
-                        c.resolve(util.getData("txv-download-hasapp") || -1)
-                    }, 6e3)
-                },
-                f = function () {
-                    var a = util.os.ios ? d.packageUrl : d.packageName,
-                        e = function () {
-                            !util.os.ios && window.QQApi && window.QQApi.checkAppInstalled ? window.QQApi.checkAppInstalled(a, function (a) {
-                                b = a && 0 != a ? 1 : 2, util.setData("txv-download-hasapp", b), c.resolve(b)
-                            }) : window.mqq && window.mqq.app && window.mqq.app.isAppInstalled ? window.mqq.app.isAppInstalled(a, function (a) {
-                                b = "object" == typeof a ? a.result ? 1 : 2 : a ? 1 : 2, util.setData("txv-download-hasapp", b), c.resolve(b)
-                            }) : c.resolve(util.getData("txv-download-hasapp") || -1)
-                        };
-                    AppHelper.loadMqqAPI().done(function () {
-                        e()
-                    })
-                },
-                g = function () {
-                    !util.os.iphone && window.QQApi && QQApi.checkAppInstalled && f();
-                    var a = function () {
-                        window.x5 && x5.ios && x5.ios.getMobileAppSupport ? x5.ios.getMobileAppSupport({
-                            scheme: d.packageUrl
-                        }, function (a) {
-                            a ? (b = 1 == a.isSupportApp ? 1 : 2, c.resolve(b)) : c.resolve(-1)
-                        }, function () {
-                            c.resolve(-1)
-                        }) : c.resolve(-1), setTimeout(function () {
-                            c.resolve(-1)
-                        }, 300)
-                    };
-                    if (!util.os.iphone && window.x5mtt && window.x5mtt.isApkInstalled) {
-                        var e = window.x5mtt.isApkInstalled('{"packagename": "com.tencent.qqlive"}');
-                        b = e == -1 ? 2 : 1, c.resolve(b)
-                    } else util.os.iphone && parseInt(util.os.version) > 5 ? AppHelper.loadMqqBrowserAPI().done(function () {
-                        a()
-                    }).fail(function () {
-                        c.resolve(-1)
-                    }) : c.resolve(-1);
-                    setTimeout(function () {
-                        c.resolve(-1)
-                    }, 3e3)
-                };
-            return util.browser.wechat ? e() : util.browser.mqq ? f() : util.browser.mqqbrowser ? g() : c.resolve(-1), c
         }, AppHelper.check = function () {
-            isChecking || checked || (isChecking = !0, AppHelper.checkHasApp().done(function (a) {
-                util.log("app-helper checkHasApp", a), Txplayer.dataset.hasApp = a, Txplayer.msg.broadcast("onCheckHasApp", a)
-            }).always(function () {
-                isChecking = !1, checked = !0
-            }))
         }, AppHelper.getPromotionIdByPtag = function () {
-            var a = util.getPTAG() || "";
-            Txplayer.$.Deferred();
-            if (a) {
-                var b = " http://growth.video.qq.com/fcgi-bin/h5_player_ptag",
-                    c = {
-                        appid: 1,
-                        appkey: 1,
-                        ptag: a
-                    };
-                Txplayer.$.ajax({
-                    url: b,
-                    data: c,
-                    dataType: "jsonp",
-                    jsonpCallback: "getmd5_callback_" + parseInt(1e6 * Math.random())
-                }).then(function (a) {
-                    util.log(a)
-                })
-            }
         }, AppHelper.getAppInfo = function (a) {
-            a = a || {};
-            var b = Txplayer.$.Deferred(),
-                c = {
-                    vid: a.vid || "",
-                    promotionId: a.promotionId || 140
-                },
-                d = "";
-            a.appName || (a.appName = "qqlive");
-            var e = appConfig[a.appName];
-            return c.openUrl = e.openUrl, c.downloadUrl = e.downloadUrl || "", c.appTitleName = e.appName, a.vid && (c.openUrl = c.openUrl.replace(/\$\{vid\}/gi, a.vid)), c.promotionId && (c.openUrl.indexOf("from=") > -1 ? c.openUrl = c.openUrl.replace(/\&from=(\d)+/, "&from=" + a.promotionId) : c.openUrl += "&from=" + a.promotionId, c.downloadUrl = c.downloadUrl.replace(/\$\{promotionId\}/gi, a.promotionId), c.downloaderUrl = c.downloadUrl), util.browser.miuibrowser && "xiaomiqj" === util.getPTAG() && (c.downloadUrl = "market://details?id=com.tencent.qqlive&startDownload=true&ref=app_free_migs&back=true"), util.browser.wechat ? (d = AppHelper.getWechatOpenid(), d && c.openUrl.indexOf("wxplugopenid=") === -1 && (c.openUrl += "&wxplugopenid=" + d), c.openUrl += "&callback=weixin%3A%2F%2F&sender=%e5%be%ae%e4%bf%a1", util.os.android ? AppHelper.getAppMd5(c.promotionId, a.appName).done(function (a) {
-                a && a.md5 && (c.md5 = a.md5, md5 = a.md5), b.resolve(c)
-            }).fail(function () {
-                c.md5 = "-1", b.resolve(c)
-            }) : b.resolve(c)) : util.browser.mqq ? (c.openUrl += "&callback=mqqapi%3A%2F%2F&sender=%E6%89%8B%E6%9C%BAQQ", c.appid = e.appId, c.packageName = e.packageName, c.via = e.VIA, b.resolve(c)) : b.resolve(c), b
+
         }, AppHelper.tryOpenApp = function (a) {
-            if (a && a.length && !util.browser.wechat && !util.browser.mqq) {
-                var b = a.attr("data-openurl"),
-                    c = a.attr("data-downloadurl");
-                if (b && c) {
-                    var d = function () {
-                            if (Txplayer.util.fiddlerLog("openApp"), util.os.ios && util.compareVersion(util.os.version, "9.0") > -1) try {
-                                Txplayer.util.fiddlerLog({
-                                    openurl: b,
-                                    s: "\u76f4\u63a5\u6253\u5f00"
-                                }), window.location.href = b
-                            } catch (a) {} else {
-                                Txplayer.util.fiddlerLog({
-                                    openurl: b,
-                                    s: "iframe\u6253\u5f00"
-                                });
-                                var a = document.createElement("iframe");
-                                a.style.cssText = "width:1px;height:1px;position:fixed;top:0;left:0;opacity:0;", a.src = b, document.body.appendChild(a)
-                            }
-                        },
-                        e = function () {
-                            Txplayer.util.fiddlerLog({
-                                downloadurl: c,
-                                s: "downloadApp"
-                            }), window.location.href = c
-                        },
-                        f = function () {
-                            d();
-                            var a = (new Date).valueOf();
-                            setTimeout(function () {
-                                var b = (new Date).valueOf();
-                                b - a < 1550 && e()
-                            }, 1500)
-                        };
-                    a.off("click.try-open-app").on("click.try-open-app", f)
-                }
-            }
         }, AppHelper.fixOpenUrl = function (vid, openUrl) {
-            if (!vid || !openUrl) return openUrl;
-            var re = eval("/(video_id=)([^&]*)/gi"),
-                nUrl = openUrl.replace(re, "video_id=" + vid);
-            return nUrl
+            
         }, AppHelper.fixCidOpenUrl = function (cid, openUrl) {
             if (cid && openUrl) {
                 var re = eval("/(video_id=)([^&]*)/gi"),
