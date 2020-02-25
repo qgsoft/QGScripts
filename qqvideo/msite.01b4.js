@@ -28026,7 +28026,7 @@
                 if( 7 === t.status ){
                     if( !t.isalert ){
                         t.isalert = true;
-                        alert("该影片为单次付费购买类型不在VIP范围内无法播放")
+                        alert("该影片为单次付费购买类型不在VIP范围内无法播放(过了热播期可以播放)")
                     }
                 } else {
                     t.limitTime = false;  
