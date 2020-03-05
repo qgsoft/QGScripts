@@ -141,14 +141,14 @@
                 return a
             }, exitWindowFullscreen: function (a) {
                 var b = this;
-                //APP里退出横屏
-                if(window.qgjs) window.qgjs.setScreenOrientation(false);
                 b.dataset.$fullscreenBtn.attr("data-status", false), b.context.dataset.isWindowFullscreen = false, a || b.requestFullScreen(null, "exit")
+                 //APP里退出横屏
+                 if(window.qgjs) window.qgjs.setScreenOrientation(false);
             }, enterWindowFullscreen: function (a) {
                 var b = this;
-                //APP里进入横屏
-                if(window.qgjs) window.qgjs.setScreenOrientation(true);
                 b.dataset.$fullscreenBtn.attr("data-status", true), b.context.dataset.isWindowFullscreen = true, a || b.requestFullScreen(null, "enter")
+                //APP里进入横屏 
+                if(window.qgjs) window.qgjs.setScreenOrientation(true);
             }, enterBrowserFullscreen: function () {
                 this.enterWindowFullscreen();
             }, exitBrowserFullscreen: function (a) {
