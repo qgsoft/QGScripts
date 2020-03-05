@@ -1806,7 +1806,7 @@
                     })
                 }, methods: {
                     callApp: function () {
-                        console.log("CALLAPP")
+                        console.log("CALL APP")
                     },
                     checkCodeToast: function (e) {
                         var t = e.showCopyCode;
