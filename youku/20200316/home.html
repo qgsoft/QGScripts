@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./youku-player.min.js"></script>
+    <script src="../done_aes-secret_.js"></script>
+    <script src="./play-pagelet.chunk.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id="ykPlayer"></video>
+</body>
+</html>
+<script>
+    
+    var ykvideo = document.getElementById("ykPlayer");
+    var rt = null;
+    var r = {
+        Fid: "0",
+        Ob: "0",
+        Pt: "0",
+        abtest: "b",
+        autoplay: true,
+        ccode: "0502",
+        ckey: "",
+        currentShowId: "329415",
+        enableFullscreenScroll: true,
+        events: {
+            onReady: function () {
+                console.log("准备好了");
+                //t.playerUpsData = window.videoPlayer._manage.global.ups, t.trigger("player:loaded", [rt])
+            }
+        },
+        isInnerPlay: false,
+        isSupportDRM: true,
+        playBackRateInfo: {
+            show: true,
+            rateList: [{
+                rate: 2,
+                text: "2.0x"
+            }, {
+                rate: 1.5
+            }, {
+                rate: 1.25
+            }, {
+                rate: 1,
+                text: "1.0x",
+                isDefault: !0
+            }, {
+                rate: .5
+            }]
+        },  
+        playmode: "3",
+        quality: "480p",
+        simpleMode: false,
+        upsServiceConfig:{
+            requesttype: "mtop"
+        },
+        vid: "XNDU3MzI0NDgzMg==",
+        vvlogconfig:{
+            embedid: "AjExNDMzMTEyMDgCdi55b3VrdS5jb20CL3Zfc2hvdy9pZF9YTkRVM016STBORGd6TWc9PS5odG1s",
+            frame: undefined,
+            plchid: ""
+        }
+    }
+    window.videoPlayer = rt = new YoukuPlayer(ykvideo, r)
+    
+</script>
