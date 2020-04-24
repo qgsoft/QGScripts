@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <video id="video" controls></video>
+</body>
+</html>
+<script>
+    //http://1252093142.vod2.myqcloud.com/4704461fvodcq1252093142/f865d8a05285890787810776469/playlist.f3.m3u8
+    var video = document.getElementById("video");
+    var assetURL = "frag_bunny.mp4";
+    var mimeCodec = 'video/mp4; codecs="avc1.42E01E, mp4a.40.2"';
+    if('MediaSource' in window && MediaSource.isTypeSupported(mimeCodec)) {
+        //创建MSE
+        var mediaSource = new MediaSource();
+        video.src = URL.createObjectURL(mediaSource);
+        //sourceopen是元素绑定到目标Video元素后触发。
+        mediaSource.addEventListener("sourceopen",sourceOpen);
+    }
+
+    function sourceOpen (e) {
+        //存储MSE这个变量，在这个作用域里使用
+        var mediaSource = e.target;
+        //必须先指定一个资源类型，返回一个sourcebuffer,之后再根据这个缓存添加数据
+        var sourceBuffer = mediaSource.addSourceBuffer(mimeCodec);
+
+        fetchAB(assetURL, function (buf) {
+            //在appendBuffer后会触发updateend事件,这个时候可能结束流并播放。如果是M3U8则可以加载下一个切片
+            sourceBuffer.addEventListener('updateend', function (_) {
+                //调用这个会改变状态readyState为ended状态
+                mediaSource.endOfStream();
+                video.play();
+            });
+            sourceBuffer.appendBuffer(buf);
+        });
+    };
+    
+    function fetchAB (url, cb) {
+        console.log(url);
+        var xhr = new XMLHttpRequest;
+        xhr.open('get', url);
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = function () {
+            cb(xhr.response);
+        };
+        xhr.send();
+    };
+</script>

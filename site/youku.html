@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.bootcss.com/hls.js/0.13.2/hls.min.js"></script>
+    <script src="./youku/done_aes-secret_.js" type="javascript"></script>
+</head>
+<body>
+    <video id="video" controls></video>
+</body>
+</html>
+<script>
+var video = document.getElementById("video");
+function generateVideoCodec(e) {
+    if (!e) return "avc1.42E01E";
+    var t = "avc1.";
+    switch (e.profileIdc) {
+    case 66:
+        t += "42E0";
+        break;
+    case 77:
+        t += "4D40";
+        break;
+    default:
+        t += "6400"
+    }
+    return t + Number(e.levelIdc).toString(16).padStart(2, "0")
+}
+function generateAudioCodec(e) {
+    if (!e) return "mp4a.40.2";
+    var t = e.samplingfrequencyindex,
+        n = e.audioobjecttype;
+    return t >= 6 && (n = 5), "mp4a.40." + n
+}
+
+function _geneCodec(e) {
+    var t, n, i = e.audioInfo, o = e.videoInfo;
+    t = generateVideoCodec(o), n = generateAudioCodec(i);
+    return {
+        videoCodec: t,
+        audioCodec: n
+    }
+}
+
+function _createSourceBuffer(e,t) {
+    var mediaSource = this;
+    var type = 'video/mp4;codecs="'.concat(t, '"');
+    var n = this.mediaSource.addSourceBuffer(type);
+    
+    _bindSourceBufferEvent(n, e), this["".concat(e, "SourceBuffer")] = n
+}
+
+
+function beginload() {
+    if(Hls.isSupported()) {
+        var video = document.getElementById('video');
+        var hls = new Hls(configure);
+        hls.loadSource('https://valipl-vip.cp31.ott.cibntv.net/6773A6506BF3B7186460F3F2A/03000900005E9BE4A6A5EFD3117E95081A6078-5DA3-4B89-9B70-A992DE5DE13D-1-114.m3u8?ccode=0502&duration=1329&expire=18000&psid=4ff04543accfadece8940ed19fa6213c&ups_client_netip=0e7ff878&ups_ts=1587536412&ups_userid=1927205578&utid=gAT7FsiEzRoCAXFu16sxRbp5&vid=XNDU1MTUxNjYxMg&vkey=B61def74628efd89c6aa25878fb85eea5&sm=1&operate_type=1&dre=u38&si=78&eo=0&dst=1&iv=1&s=cbba934b14f747049187&type=mp4hd3v3&bc=2');
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED,function() {
+            video.play();
+        })
+    }
+}
+
+if(window.Worker) {
+    var myWorker = new Worker('./TSMUXERSOURCE.js');
+    myWorker.onmessage = function(e){
+        var data = e.data;
+        if(data.length != 2) {
+            alert("解码错误");
+        } else {
+            console.log(data);
+            var audioData = data[1].data;
+            var videoData = data[0].data;
+            var t = _geneCodec({audioInfo:data[1].info,videoInfo:data[0].info}),
+            n = t.audioCodec,
+            i = t.videoCodec;
+            if (this.lastAudioCodec && this.lastAudioCodec !== n) return logger.warn("audio codecs changed : ", "".concat(this.lastAudioCodec, " -> ").concat(n)), !1;
+            this.lastAudioCodec = n, audioData && (this.audioSourceBuffer || _createSourceBuffer("audio", n), 
+            this.combine || this.audioSourceBuffer.appendBuffer(audioData)), 
+            videoData && (this.videoSourceBuffer || this._createSourceBuffer("video", i))   
+            //e.appendWindowEnd ? (this.videoSourceBuffer.appendWindowEnd = 1 / 0,
+            //this.videoSourceBuffer.appendWindowEnd = e.appendWindowEnd) : this.videoSourceBuffer.appendWindowEnd = 1 / 0, 
+            //this.combine || this.videoSourceBuffer.appendBuffer(e.videoData)), 
+            //this.combine && (this.audioSourceBuffer.appendBuffer(e.audioData),
+            //this.videoSourceBuffer.appendBuffer(e.videoData))
+        }
+    }
+
+    var msg = {
+        type : "INIT",
+        data : {
+            decodeKey:null,
+            keepOriginalTimestamps:false,
+            remux:false,
+        } 
+    }
+    myWorker.postMessage(msg);
+  
+    var configure = {
+        //MEU8加载器
+        loader : function() {
+            const loader = new Hls.DefaultConfig.loader(configure);
+            this.abort = () => loader.abort();
+            this.destroy = () => loader.destroy();
+
+            this.load = (context, config, callbacks) => {
+            //const { type } = context;
+            const onSuccess = callbacks.onSuccess;
+            callbacks.onSuccess = (response, stats, context, networkDetails ) => {
+                //if (type !== "manifest") {
+                //var array = new Uint8Array(response.data);
+                //  for(var i = 0; i < array.length; ++i){
+                //    TestAES(array,"video",true)
+                //  }
+                //console.log(array.length);
+                //}
+                console.log("加载M3U8: "+response.url);
+                //每次加载一个TS前初始化一次片段
+                myWorker.postMessage({type: "RESET_INIT_SEGMENT"})
+                onSuccess(response, stats, context,networkDetails);
+                };
+                loader.load(context, config, callbacks);
+            };
+        },
+        //片段加载器
+        fLoader : function() {
+            //恢复一次默认的数据。
+            const loader = new Hls.DefaultConfig.loader(configure);
+            this.load = (context, config, callbacks) => {
+                const onSuccess = callbacks.onSuccess;
+                callbacks.onSuccess = (response, stats, context, networkDetails ) => {
+                    var e = response.data;
+                    var msg2 = {
+                        type :  "BUFFER_DATA",
+                        data : {
+                            buffer:e,
+                            encrypted:true,
+                            continuous:undefined,
+                            discontinuity:true,
+                            timeOffset:context.frag.start,
+                            accurateTimeOffset:true,    
+                        }
+                }
+                console.log("加载TS："+response.url);
+                //先初始化密锁   
+                myWorker.postMessage(msg2,e instanceof ArrayBuffer ? [e] : []);
+                //myWorker.postMessage(msg2);
+                //onSuccess(response, stats, context,networkDetails);
+                };
+                loader.load(context, config, callbacks);
+            };
+        }
+    };
+    beginload();
+}
+</script>
